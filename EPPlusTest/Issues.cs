@@ -11,14 +11,27 @@ using OfficeOpenXml.Style;
 using System.Data;
 using OfficeOpenXml.Table;
 using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
 using OfficeOpenXml.Table.PivotTable;
+using Rhino.Mocks;
 using OfficeOpenXml.Drawing.Chart;
+using OfficeOpenXml.FormulaParsing;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
+using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
+using OfficeOpenXml.FormulaParsing.LexicalAnalysis.TokenSeparatorHandlers;
+
 
 namespace EPPlusTest
 {
     [TestClass]
-    public class Issues
+    public class Issues : ITokenIndexProvider
     {
+
+        private ITokenFactory _tokenFactory;
+        private INameValueProvider _nameValueProvider;
+        private int _index = 0;
+
+
         [TestInitialize]
         public void Initialize()
         {
@@ -1326,6 +1339,524 @@ namespace EPPlusTest
                 ws.Cells[1, 1, 1, 3].Merge = true;
                 pckg.Save();
             }
+        }
+
+        [TestMethod]
+
+        public void Issue15347()
+        {
+            using (var file = new MemoryStream())
+            {
+                file.Write(EPPlusTest.Properties.Resources.Issue15347Test, 0,
+                    EPPlusTest.Properties.Resources.Issue15347Test.Length);
+                using (ExcelPackage package = new ExcelPackage(file))
+                {
+
+                    var sheet = package.Workbook.Worksheets[1];
+
+                    ExcelRange range = sheet.Cells[1, 1];
+                    package.Save();
+                }
+
+                using (ExcelPackage package = new ExcelPackage(file))
+                {
+                    var sheet = package.Workbook.Worksheets["Tabelle1"];
+                    ExcelRange range = sheet.Cells[1, 1];
+                    Assert.IsTrue(range.Value is string);
+                }
+            }
+        }
+
+
+        [TestMethod]
+        public void Issue15353_QuotsInNamedRanges()
+        {
+            var package = new ExcelPackage();
+            var sheet = package.Workbook.Worksheets.Add("My 'Sheet");
+            var namedRange1 = package.Workbook.Names.Add("name1", new ExcelRangeBase(sheet, "$B$1"));
+
+            Assert.AreEqual(namedRange1.FullAddressAbsolute, "'My ''Sheet'!$B$1");
+
+
+            //"My "Sheet"            //'My "Sheet'!$A$1
+
+        }
+
+        [TestMethod]
+        public void Issue15353_QuotsInFormulae()
+        {
+            //positive Example 1:
+            TokenizerContext formulaContext1 = new TokenizerContext("= part1 & \" is \'\" & yearshort");
+
+            formulaContext1.ToggleIsInSheetName();
+
+            TokenHandler handlerSheetName1 =
+                new TokenHandler(formulaContext1, _tokenFactory, new TokenSeparatorProvider());
+            handlerSheetName1.Worksheet = "My 'Sheet";
+
+            while (handlerSheetName1.HasMore())
+            {
+                handlerSheetName1.Next();
+            }
+            var _syntAnalyzer = new SyntacticAnalyzer();
+
+            try
+            {
+                _syntAnalyzer.Analyze(formulaContext1.Result);
+
+            }
+            catch
+            {
+                Assert.IsTrue(false, "Syntactic analyzer throws exception on a valid string");
+            }
+
+
+            //positive Example 2:
+
+            TokenizerContext formulaContext2 = new TokenizerContext("= part1 & \" is \"\"some\"\" \" & yearshort");
+
+            formulaContext2.ToggleIsInSheetName();
+
+            TokenHandler handlerSheetName2 =
+                new TokenHandler(formulaContext2, _tokenFactory, new TokenSeparatorProvider());
+            handlerSheetName2.Worksheet = "My 'Sheet";
+
+            while (handlerSheetName2.HasMore())
+            {
+                handlerSheetName2.Next();
+            }
+            var _syntAnalyzer2 = new SyntacticAnalyzer();
+
+            try
+            {
+                _syntAnalyzer2.Analyze(formulaContext2.Result);
+
+            }
+            catch
+            {
+                Assert.IsTrue(false, "Syntactic analyzer throws exception on a valid string");
+            }
+
+
+            //positive Example 3:
+
+            TokenizerContext formulaContext3 = new TokenizerContext("= part1 & \" is some \"\"\" & yearshort");
+
+            formulaContext3.ToggleIsInSheetName();
+
+            TokenHandler handlerSheetName3 =
+                new TokenHandler(formulaContext3, _tokenFactory, new TokenSeparatorProvider());
+            handlerSheetName3.Worksheet = "My 'Sheet";
+
+            while (handlerSheetName3.HasMore())
+            {
+                handlerSheetName3.Next();
+            }
+            var _syntAnalyzer3 = new SyntacticAnalyzer();
+
+            try
+            {
+                _syntAnalyzer3.Analyze(formulaContext3.Result);
+            }
+            catch
+            {
+                Assert.IsTrue(false, "Syntactic analyzer throws exception on a valid string");
+            }
+
+
+            //positive Example 4:
+
+            TokenizerContext formulaContext4 = new TokenizerContext("= part1 & \"\' is some\'\" & yearshort");
+
+            formulaContext4.ToggleIsInSheetName();
+
+            TokenHandler handlerSheetName4 =
+                new TokenHandler(formulaContext4, _tokenFactory, new TokenSeparatorProvider());
+            handlerSheetName4.Worksheet = "My 'Sheet";
+
+            while (handlerSheetName4.HasMore())
+            {
+                handlerSheetName4.Next();
+            }
+            var _syntAnalyzer4 = new SyntacticAnalyzer();
+
+            try
+            {
+                _syntAnalyzer4.Analyze(formulaContext4.Result);
+
+            }
+            catch
+            {
+                Assert.IsTrue(false, "Syntactic analyzer throws exception on a valid string");
+            }
+
+
+            //positive Example 5:
+
+            TokenizerContext formulaContext5 = new TokenizerContext("= part1 & \" is some\'\'\" & yearshort");
+
+            formulaContext5.ToggleIsInSheetName();
+
+            TokenHandler handlerSheetName5 =
+                new TokenHandler(formulaContext5, _tokenFactory, new TokenSeparatorProvider());
+            handlerSheetName5.Worksheet = "My 'Sheet";
+
+            while (handlerSheetName5.HasMore())
+            {
+                handlerSheetName5.Next();
+            }
+            var _syntAnalyzer5 = new SyntacticAnalyzer();
+
+            try
+            {
+                _syntAnalyzer5.Analyze(formulaContext5.Result);
+            }
+            catch
+            {
+                Assert.IsTrue(false, "Syntactic analyzer throws exception on a valid string");
+            }
+
+
+            //negative Example 1:
+
+            TokenizerContext formulaContext6 = new TokenizerContext("= part1 & \" is \"\"some\" \" & yearshort");
+
+
+            formulaContext6.ToggleIsInSheetName();
+
+            TokenHandler handlerSheetName6 =
+                new TokenHandler(formulaContext6, _tokenFactory, new TokenSeparatorProvider());
+            handlerSheetName6.Worksheet = "My 'Sheet";
+
+            while (handlerSheetName6.HasMore())
+            {
+                handlerSheetName6.Next();
+            }
+            var _syntAnalyzer6 = new SyntacticAnalyzer();
+
+            try
+            {
+                _syntAnalyzer6.Analyze(formulaContext6.Result);
+                Assert.Fail("Syntactic analyzer has to throw an exception on an invalid string");
+            }
+            catch
+            {
+
+            }
+
+
+            //negative Example 2: 
+
+            TokenizerContext formulaContext7 = new TokenizerContext("= part1 & \" is some \"\" & yearshort");
+
+            formulaContext7.ToggleIsInSheetName();
+
+            TokenHandler handlerSheetName7 =
+                new TokenHandler(formulaContext7, _tokenFactory, new TokenSeparatorProvider());
+            handlerSheetName7.Worksheet = "My 'Sheet";
+
+            while (handlerSheetName7.HasMore())
+            {
+                handlerSheetName7.Next();
+            }
+            var _syntAnalyzer7 = new SyntacticAnalyzer();
+
+            try
+            {
+                _syntAnalyzer7.Analyze(formulaContext7.Result);
+                Assert.Fail("Syntactic analyzer has to throw an exception on an invalid string");
+            }
+            catch
+
+            {
+
+
+                //negative Example 3:
+
+                TokenizerContext formulaContext8 = new TokenizerContext("= part1 & \"\' is some\' & yearshort");
+
+                //negative
+                //= part1 & " is some'' & yearshort
+
+
+                formulaContext8.ToggleIsInSheetName();
+
+                TokenHandler handlerSheetName8 =
+                    new TokenHandler(formulaContext8, _tokenFactory, new TokenSeparatorProvider());
+                handlerSheetName8.Worksheet = "My 'Sheet";
+
+                while (handlerSheetName8.HasMore())
+
+                    handlerSheetName8.Next();
+
+                var _syntAnalyzer8 = new SyntacticAnalyzer();
+            }
+        }
+
+
+        [TestMethod]
+        public void Issue15221()
+        {
+            
+            using (var package = new ExcelPackage())
+            {
+                var sheet = package.Workbook.Worksheets.Add("sheet1");
+
+                var comment = sheet.Cells["A1"].AddComment("Text", "Author");
+                comment.Visible = true;
+                Assert.IsTrue(comment.Style.Contains("visible"));
+            }
+        }
+
+
+        [TestMethod]
+        public void Issue15345()
+        {
+
+            string address1 = @"'C:\Projects\epplusamana_new\EPPlusTest\Workbooks\[FormulaTest.xlsx]Sheet1'#REF!C1";
+            string address2 = @"'C:\Projects\epplusamana_new\EPPlusTest\Workbooks\[FormulaTest.xlsx]Sheet1'SUMME(#REF!A1:B1)";
+            Assert.AreEqual(ExcelAddressBase.IsValid(address1), ExcelAddressBase.AddressType.Invalid);
+            Assert.AreEqual(ExcelAddressBase.IsValid(address2), ExcelAddressBase.AddressType.Invalid);
+        }
+
+        [TestMethod]
+        public void Issue15399()
+        {
+            using (var getReference = new MemoryStream())
+            {
+
+                getReference.Write(EPPlusTest.Properties.Resources.TestFile_Issue15399, 0,
+                    EPPlusTest.Properties.Resources.TestFile_Issue15399.Length);
+                using (ExcelPackage packageGetReference = new ExcelPackage(getReference))
+                {
+
+                    Assert.AreEqual(@"[1]Tabelle1!$A$1", packageGetReference.Workbook.Names[0].Formula);
+                    Assert.IsFalse(packageGetReference.Workbook.Names[0].Address.Contains(@"file:"));
+                }
+
+            }
+        }
+
+
+        [TestMethod]
+        public void Issue15361()
+        {
+            using (var file = new MemoryStream())
+            {
+                file.Write(EPPlusTest.Properties.Resources.Reproduce_StandardStyle_Issue15361, 0,
+                    EPPlusTest.Properties.Resources.Reproduce_StandardStyle_Issue15361.Length);
+                using (ExcelPackage package = new ExcelPackage(file))
+                {
+                    package.Save();
+                }
+                file.Position = 0;
+                using (ExcelPackage package = new ExcelPackage(file))
+                {
+                    OfficeOpenXml.Style.XmlAccess.ExcelNamedStyleXml testStyle = null;
+                    Assert.IsFalse(package.Workbook.Styles.NamedStyles.FindByID("Normal", ref testStyle), "A normalstyle should be found now.");
+                    Assert.IsTrue(package.Workbook.Styles.NamedStyles.FindByID("Standard", ref testStyle), "The standardstyle should now be the normal Style");
+                    Assert.AreEqual(0, testStyle.StyleXfId, "The Standardstyle should have the same index as the Normalstyle before.");
+                    Assert.AreEqual(0, testStyle.Style.Font.Index, "The Standardstyle should have the same index as the Normalstyle before.");
+                    Assert.AreEqual(0, testStyle.Style.Numberformat.Index, "The Standardstyle should have the same index as the Normalstyle before.");
+                }
+            }
+
+        }
+
+
+        [TestMethod]
+        public void RemoveCommentsIssue()
+        {
+            using (var p = new ExcelPackage(new FileInfo(@"C:\Users\larissa.hohaus\Documents\EPPlus\empty_Dokument.xlsx")))
+            {
+                var sheet = p.Workbook.Worksheets.First();
+
+
+                var cellB3 = sheet.Cells["B3"];
+                var cellB4 = sheet.Cells["B4"];
+                var cellB5 = sheet.Cells["B5"];
+
+                cellB3.AddComment("myCommentB3", "me");
+                cellB4.AddComment("myCommentB4", "me");
+                cellB5.AddComment("myCommentB5", "me");
+
+                foreach (var cell in sheet.Cells)
+                {
+                    if (cell.Comment != null ){
+                        sheet.Comments.Remove(cell.Comment);
+                    }
+                }
+
+                Assert.IsNull(cellB3.Comment);
+                Assert.IsNull(cellB4.Comment);
+                Assert.IsNull(cellB5.Comment);
+
+
+            }
+        }
+
+        [TestMethod]
+        public void SumsIssue()
+        {
+            using (var p = new ExcelPackage())
+            {
+                p.Workbook.Worksheets.Add("first");
+
+                var sheet = p.Workbook.Worksheets.First();
+
+                var cellA1 = sheet.Cells["A1"];
+                var cellA2 = sheet.Cells["A2"];
+                var cellA3 = sheet.Cells["A3"];
+                var cellA4 = sheet.Cells["A4"];
+                var cellA5 = sheet.Cells["A5"];
+                var cellA6 = sheet.Cells["A6"];
+                var cellA7 = sheet.Cells["A7"];
+                var cellA8 = sheet.Cells["A8"];
+                var cellA9 = sheet.Cells["A9"];
+                var cellA10 = sheet.Cells["A10"];
+                var cellA11 = sheet.Cells["A11"];
+                var cellA12 = sheet.Cells["A12"];
+                cellA1.Value = 1;
+                cellA2.Value = 1;
+                cellA3.Value = 1;
+                cellA4.Value = 1;
+                cellA5.Value = 1;
+                cellA6.Value = 1;
+                cellA7.Value = 1;
+                cellA8.Value = 1;
+                cellA9.Value = 1;
+                cellA10.Value = 1;
+                cellA11.Value = 1;
+                cellA12.Formula = "SUM(A1:A3,A5,A6,A7,A8,A10,A9,A11)";
+
+                int counterFirstIteration = 0;
+                int counterSecondIteration = 0;
+
+
+                int CounterSingleAdress = 0;
+                int CounterMultipleRanges = 0;
+                int CounterRangesFirst = 0;
+                int CounterRangesLast = 0;
+                int counterNoRanges = 0;
+                int counterOneRange = 0;
+                int counterMixed = 0;
+                var cellsFirstIteration = string.Empty;
+                var cellsSecondIteration = string.Empty;
+                var cellsSingleAdress = string.Empty;
+                var cellsMultipleRanges = string.Empty;
+                var cellsRangesFirst = string.Empty;
+                var cellsRangesLast = string.Empty;
+                var cellsNoRanges = string.Empty;
+                var cellsOneRange = string.Empty;
+                var cellsMixed = string.Empty;
+
+
+                var range = sheet.Cells["A1:A3,A5,A6,A7,A8,A10,A9,A11"];
+                foreach (var cell in range)
+                {
+                    counterFirstIteration++;
+                    cellsFirstIteration = $"{cellsFirstIteration};{cell.Address}";
+                }
+
+                foreach (var cell in range)
+                {
+                    counterSecondIteration++;
+                    cellsSecondIteration = $"{cellsSecondIteration};{cell.Address}";
+                }
+                Assert.AreEqual(cellsFirstIteration, cellsSecondIteration);
+                Assert.AreEqual(cellsFirstIteration, ";A1;A2;A3;A5;A6;A7;A8;A10;A9;A11");
+
+                Assert.AreEqual(counterFirstIteration, counterSecondIteration);
+                Assert.AreEqual(10, counterFirstIteration);
+
+
+                var rangeSingleAdress = sheet.Cells["A1"];
+               foreach (var cell in rangeSingleAdress)
+                {
+                    CounterSingleAdress++;
+                    cellsSingleAdress = $"{cellsSingleAdress};{cell.Address}";
+                }
+                Assert.AreEqual(";A1", cellsSingleAdress);
+                Assert.AreEqual(1, CounterSingleAdress);
+
+
+                var rangeMultipleRanges = sheet.Cells["A1:A4,A5:A7,A8:A11"];
+                foreach (var cell in rangeMultipleRanges)
+                {
+                    CounterMultipleRanges++;
+                    cellsMultipleRanges = $"{cellsMultipleRanges};{cell.Address}";
+                }
+                Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7;A8;A9;A10;A11", cellsMultipleRanges);
+                Assert.AreEqual(11, CounterMultipleRanges);
+
+
+                var rangeRangeFirst = sheet.Cells["A1:A4,A5,A6,A7"];
+                foreach (var cell in rangeRangeFirst)
+                {
+                    CounterRangesFirst++;
+                    cellsRangesFirst = $"{cellsRangesFirst};{cell.Address}";
+                }
+                Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7", cellsRangesFirst);
+                Assert.AreEqual(7, CounterRangesFirst);
+
+
+                var rangeRangeLast = sheet.Cells["A1,A2,A3,A4:A7"];
+                foreach (var cell in rangeRangeLast)
+                {
+                    CounterRangesLast++;
+                    cellsRangesLast = $"{cellsRangesLast};{cell.Address}";
+                }
+                Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7", cellsRangesLast);
+                Assert.AreEqual(7, CounterRangesLast);
+
+
+                var rangeOneRange = sheet.Cells["A1:A7"];
+                foreach (var cell in rangeOneRange)
+                {
+                    counterOneRange++;
+                    cellsOneRange = $"{cellsOneRange};{cell.Address}";
+                }
+                Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7", cellsOneRange);
+                Assert.AreEqual(7, counterOneRange);
+
+
+                var rangeNoRange = sheet.Cells["A1,A2,A3,A4"];
+                foreach (var cell in rangeNoRange)
+                {
+                    counterNoRanges++;
+                    cellsNoRanges = $"{cellsNoRanges};{cell.Address}";
+                }
+                Assert.AreEqual(";A1;A2;A3;A4", cellsNoRanges);
+                Assert.AreEqual(4, counterNoRanges);
+
+
+                var rangeMixed = sheet.Cells["A1,A2,A3:A5,A6,A7"];
+                foreach (var cell in rangeMixed)
+                {
+                    counterMixed++;
+                    cellsMixed = $"{cellsMixed};{cell.Address}";
+                }
+                Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7" , cellsMixed);
+                Assert.AreEqual(7, counterMixed);
+
+
+                int counter = 0;
+                String cells = String.Empty;
+                foreach (var cell in sheet.Cells)
+                {
+                    counter++;
+                    cells = $"{cells};{cell.Address}";
+                }
+                Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7;A8;A9;A10;A11;A12", cells);
+                Assert.AreEqual(12, counter);
+
+            }
+        }
+
+        public int Index { get; }
+        public void MoveIndexPointerForward()
+        {
+            throw new NotImplementedException();
         }
     }
 }

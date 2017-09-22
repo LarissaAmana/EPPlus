@@ -1422,9 +1422,9 @@ namespace OfficeOpenXml
 		{
 			get
 			{
-				string wbwsRef = string.IsNullOrEmpty(base._wb) ? base._ws : "[" + base._wb.Replace("'", "''") + "]" + _ws;
-				string fullAddress = GetFullAddress(wbwsRef, GetAddress(_fromRow, _fromCol, _toRow, _toCol, true));
-				if (Addresses != null)
+			    string wbwsRef = string.IsNullOrEmpty(base._wb) ? base._ws.Replace("'", "''") : "[" + base._wb.Replace("'", "''") + "]" + _ws.Replace("'", "''");
+			    string fullAddress = GetFullAddress(wbwsRef, GetAddress(_fromRow, _fromCol, _toRow, _toCol, true));
+                if (Addresses != null)
 				{
 					foreach (var a in Addresses)
 					{
@@ -2716,37 +2716,44 @@ namespace OfficeOpenXml
         public object FormatedText { get; private set; }
 
         int _enumAddressIx = -1;
-        public bool MoveNext()
-		{
-            if (cellEnum.Next())
-            {
-                return true;
-            }
-            else if (_addresses!=null)
-            {
-                _enumAddressIx++;
-                if (_enumAddressIx < _addresses.Count)
-                {
-                    cellEnum = new CellsStoreEnumerator<ExcelCoreValue>(_worksheet._values, 
-                        _addresses[_enumAddressIx]._fromRow, 
-                        _addresses[_enumAddressIx]._fromCol, 
-                        _addresses[_enumAddressIx]._toRow, 
-                        _addresses[_enumAddressIx]._toCol);
-                    return MoveNext();
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            return false;
-		}
 
-		public void Reset()
-		{
-            _enumAddressIx = -1;
-            cellEnum = new CellsStoreEnumerator<ExcelCoreValue>(_worksheet._values, _fromRow, _fromCol, _toRow, _toCol);
-        }
-    #endregion
+
+	    public bool MoveNext()
+	    {
+	        if (cellEnum != null
+	            && cellEnum.Next()) return true;
+
+	        _enumAddressIx++;
+
+	        if (_addresses == null)
+	        {
+	            if (cellEnum != null) return false;
+
+	            cellEnum = new CellsStoreEnumerator<ExcelCoreValue>(_worksheet._values,
+	                _fromRow,
+	                _fromCol,
+	                _toRow,
+	                _toCol);
+	        }
+	        else
+	        {
+	            if (_enumAddressIx >= _addresses.Count) return false;
+
+	            cellEnum = new CellsStoreEnumerator<ExcelCoreValue>(_worksheet._values,
+	                _addresses[_enumAddressIx]._fromRow,
+	                _addresses[_enumAddressIx]._fromCol,
+	                _addresses[_enumAddressIx]._toRow,
+	                _addresses[_enumAddressIx]._toCol);
+	        }
+	        return true;
+	    }
+
+	    public void Reset()
+	    {
+	        _enumAddressIx = -1;
+	        cellEnum = null;
+	    }
+
+#endregion
     }
 }

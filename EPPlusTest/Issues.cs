@@ -17,6 +17,7 @@ using Rhino.Mocks;
 using OfficeOpenXml.Drawing.Chart;
 using OfficeOpenXml.FormulaParsing;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
+using OfficeOpenXml.FormulaParsing.ExpressionGraph;
 using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
 using OfficeOpenXml.FormulaParsing.LexicalAnalysis.TokenSeparatorHandlers;
 
@@ -1695,6 +1696,136 @@ namespace EPPlusTest
             }
         }
 
+
+        [TestMethod]
+        public void ParserProblem2()
+        {
+            using (var p = new ExcelPackage(new FileInfo(@"C:\Users\larissa.hohaus\Desktop\BugFixTests\SN_T_1506337027_Kapitel.xlsx")))
+            {
+                var sheet = p.Workbook.Worksheets["Tabelle1"];
+                //sheet.NameSpaceManager.LookupNamespace("outerea");
+                
+                Dictionary<int, String> _vsheetFormula = new Dictionary<int, string>();
+                Dictionary<int, String> _vsheetFormulaExpected = new Dictionary<int, string>();
+                _vsheetFormulaExpected[0] = "";
+                _vsheetFormulaExpected[1] = "";
+                _vsheetFormulaExpected[2] = "";
+                _vsheetFormulaExpected[3] = "SUM(B1:B2,B3)";
+
+
+                //ExcelRangeBase _columnRange = sheet.Cells[1, 3, ExcelPackage.MaxRows, 3];
+                ExcelRangeBase _columnRange = sheet.Cells["C:C"];
+                String colRange = String.Empty;
+                _vsheetFormula = (from r in _columnRange select r).ToDictionary(r => r.Start.Row, r => r.Formula);
+                //foreach (var cell in _columnRange)
+                //{
+                //    //_vsheetFormula[cell.Start.Row] = cell.Formula;
+                //    colRange = $"{colRange};{cell.Address}";
+                //}
+                
+
+                Assert.AreEqual(_vsheetFormulaExpected, _vsheetFormula);
+                Assert.AreEqual(";C1;C2;C3;C4", colRange);
+                
+            }
+        }
+
+        [TestMethod]
+        public void ParserProblem()
+        {
+            using (var p = new ExcelPackage())
+            {
+                p.Workbook.Worksheets.Add("first");
+
+                var sheet = p.Workbook.Worksheets.First();
+
+                //var cellA1 = sheet.Cells["A1"];
+                var cellA2 = sheet.Cells["A2"];
+                var cellA3 = sheet.Cells["A3"];
+                var cellA4 = sheet.Cells["A4"];
+                var cellA5 = sheet.Cells["A5"];
+                var cellA6 = sheet.Cells["A6"];
+                var cellA7 = sheet.Cells["A7"];
+                var cellA8 = sheet.Cells["A8"];
+                //var cellA9 = sheet.Cells["A9"];
+                var cellA10 = sheet.Cells["A10"];
+                var cellA11 = sheet.Cells["A11"];
+                var cellA12 = sheet.Cells["A12"];
+                //cellA1.Value = 1;
+                cellA2.Value = 1;
+                cellA3.Value = 1;
+                cellA4.Value = 1;
+                cellA5.Value = 1;
+                cellA6.Value = 1;
+                cellA7.Value = 1;
+                cellA8.Value = 1;
+                //cellA9.Value = 1;
+                cellA10.Value = 1;
+                cellA11.Value = 1;
+                cellA12.Formula = "SUM(A1:A3,A5,A6,A7,A8,A10,A9,A11)";
+
+
+                int counterColRange = 0;
+                var colRange = String.Empty;
+                var Formula = String.Empty;
+                var Value = String.Empty;
+                var Adress = String.Empty;
+                var result = String.Empty;
+                var rowId = String.Empty;
+                var rowIds = String.Empty;
+                
+                foreach (var cell in sheet.Cells["A:A"])
+                {
+                    counterColRange++;
+                    colRange = $"{colRange};{cell.Address}";
+                    Formula = cell.Formula;
+                    Value = $"{cell.Value}";
+                    Adress = cell.Address;
+                    rowId = $"{cell.Start.Row}";
+                    result = $"{result},{Adress}:{Formula}:{Value}:{rowId}";
+                    rowIds = $"{rowIds};{cell.Start.Row}";
+
+                }
+                //Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7;A8;A9;A10;A11;A12", colRange);
+                Assert.AreEqual(";A2;A3;A4;A5;A6;A7;A8;A10;A11;A12", colRange);
+                //Assert.AreEqual(";1;2;3;4;5;6;7;8;9;10;11;12", rowIds);
+                Assert.AreEqual(";2;3;4;5;6;7;8;10;11;12", rowIds);
+
+                //Assert.AreEqual(12, counterColRange);
+                Assert.AreEqual(10, counterColRange);
+
+
+                counterColRange = 0;
+                colRange = String.Empty;
+                Formula = String.Empty;
+                Value = String.Empty;
+                Adress = String.Empty;
+                result = String.Empty;
+                rowId = String.Empty;
+                rowIds = String.Empty;
+                foreach (var cell in sheet.Cells["A:A"])
+                {
+                    counterColRange++;
+                    colRange = $"{colRange};{cell.Address}";
+                    Formula = cell.Formula;
+                    Value = $"{cell.Value}";
+                    Adress = cell.Address;
+                    rowId = $"{cell.Start.Row}";
+                    result = $"{result},{Adress}:{Formula}:{Value}:{rowId}";
+                    rowIds = $"{rowIds};{cell.Start.Row}";
+
+                }
+                //Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7;A8;A9;A10;A11;A12", colRange);
+                Assert.AreEqual(";A2;A3;A4;A5;A6;A7;A8;A10;A11;A12", colRange);
+                //Assert.AreEqual(";1;2;3;4;5;6;7;8;9;10;11;12", rowIds);
+                Assert.AreEqual(";2;3;4;5;6;7;8;10;11;12", rowIds);
+
+                //Assert.AreEqual(12, counterColRange);
+                Assert.AreEqual(10, counterColRange);
+
+            }
+        }
+
         [TestMethod]
         public void SumsIssue()
         {
@@ -1770,6 +1901,8 @@ namespace EPPlusTest
                 Assert.AreEqual(10, counterFirstIteration);
 
 
+
+
                 var rangeSingleAdress = sheet.Cells["A1"];
                foreach (var cell in rangeSingleAdress)
                 {
@@ -1778,6 +1911,17 @@ namespace EPPlusTest
                 }
                 Assert.AreEqual(";A1", cellsSingleAdress);
                 Assert.AreEqual(1, CounterSingleAdress);
+
+                cellsSingleAdress = String.Empty;
+                CounterSingleAdress = 0;
+                foreach (var cell in rangeSingleAdress)
+                {
+                    CounterSingleAdress++;
+                    cellsSingleAdress = $"{cellsSingleAdress};{cell.Address}";
+                }
+                Assert.AreEqual(";A1", cellsSingleAdress);
+                Assert.AreEqual(1, CounterSingleAdress);
+
 
 
                 var rangeMultipleRanges = sheet.Cells["A1:A4,A5:A7,A8:A11"];
@@ -1789,6 +1933,17 @@ namespace EPPlusTest
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7;A8;A9;A10;A11", cellsMultipleRanges);
                 Assert.AreEqual(11, CounterMultipleRanges);
 
+                CounterMultipleRanges = 0;
+                cellsMultipleRanges = String.Empty;
+                foreach (var cell in rangeMultipleRanges)
+                {
+                    CounterMultipleRanges++;
+                    cellsMultipleRanges = $"{cellsMultipleRanges};{cell.Address}";
+                }
+                Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7;A8;A9;A10;A11", cellsMultipleRanges);
+                Assert.AreEqual(11, CounterMultipleRanges);
+
+
 
                 var rangeRangeFirst = sheet.Cells["A1:A4,A5,A6,A7"];
                 foreach (var cell in rangeRangeFirst)
@@ -1798,6 +1953,17 @@ namespace EPPlusTest
                 }
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7", cellsRangesFirst);
                 Assert.AreEqual(7, CounterRangesFirst);
+
+                CounterRangesFirst = 0;
+                cellsRangesFirst = String.Empty;
+                foreach (var cell in rangeRangeFirst)
+                {
+                    CounterRangesFirst++;
+                    cellsRangesFirst = $"{cellsRangesFirst};{cell.Address}";
+                }
+                Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7", cellsRangesFirst);
+                Assert.AreEqual(7, CounterRangesFirst);
+
 
 
                 var rangeRangeLast = sheet.Cells["A1,A2,A3,A4:A7"];
@@ -1809,6 +1975,17 @@ namespace EPPlusTest
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7", cellsRangesLast);
                 Assert.AreEqual(7, CounterRangesLast);
 
+                CounterRangesLast = 0;
+                cellsRangesLast = String.Empty;
+                foreach (var cell in rangeRangeLast)
+                {
+                    CounterRangesLast++;
+                    cellsRangesLast = $"{cellsRangesLast};{cell.Address}";
+                }
+                Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7", cellsRangesLast);
+                Assert.AreEqual(7, CounterRangesLast);
+
+
 
                 var rangeOneRange = sheet.Cells["A1:A7"];
                 foreach (var cell in rangeOneRange)
@@ -1818,6 +1995,17 @@ namespace EPPlusTest
                 }
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7", cellsOneRange);
                 Assert.AreEqual(7, counterOneRange);
+
+                counterOneRange = 0;
+                cellsOneRange = String.Empty;
+                foreach (var cell in rangeOneRange)
+                {
+                    counterOneRange++;
+                    cellsOneRange = $"{cellsOneRange};{cell.Address}";
+                }
+                Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7", cellsOneRange);
+                Assert.AreEqual(7, counterOneRange);
+
 
 
                 var rangeNoRange = sheet.Cells["A1,A2,A3,A4"];
@@ -1829,6 +2017,17 @@ namespace EPPlusTest
                 Assert.AreEqual(";A1;A2;A3;A4", cellsNoRanges);
                 Assert.AreEqual(4, counterNoRanges);
 
+                counterNoRanges = 0;
+                cellsNoRanges = String.Empty;
+                foreach (var cell in rangeNoRange)
+                {
+                    counterNoRanges++;
+                    cellsNoRanges = $"{cellsNoRanges};{cell.Address}";
+                }
+                Assert.AreEqual(";A1;A2;A3;A4", cellsNoRanges);
+                Assert.AreEqual(4, counterNoRanges);
+
+
 
                 var rangeMixed = sheet.Cells["A1,A2,A3:A5,A6,A7"];
                 foreach (var cell in rangeMixed)
@@ -1838,6 +2037,17 @@ namespace EPPlusTest
                 }
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7" , cellsMixed);
                 Assert.AreEqual(7, counterMixed);
+
+                counterMixed=0;
+                cellsMixed = String.Empty;
+                foreach (var cell in rangeMixed)
+                {
+                    counterMixed++;
+                    cellsMixed = $"{cellsMixed};{cell.Address}";
+                }
+                Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7", cellsMixed);
+                Assert.AreEqual(7, counterMixed);
+
 
 
                 int counter = 0;
@@ -1849,6 +2059,87 @@ namespace EPPlusTest
                 }
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7;A8;A9;A10;A11;A12", cells);
                 Assert.AreEqual(12, counter);
+
+                counter = 0;
+                cells = String.Empty;
+                foreach (var cell in sheet.Cells)
+                {
+                    counter++;
+                    cells = $"{cells};{cell.Address}";
+                }
+                Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7;A8;A9;A10;A11;A12", cells);
+                Assert.AreEqual(12, counter);
+
+
+
+                int counterColRange = 0;
+                var colRange = String.Empty;
+                foreach (var cell in sheet.Cells["A:A"])
+                {
+                    counterColRange++;
+                    colRange = $"{colRange};{cell.Address}";
+                }
+                Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7;A8;A9;A10;A11;A12", colRange);
+                Assert.AreEqual(12, counterColRange);
+
+                counterColRange = 0;
+                colRange = String.Empty;
+                foreach (var cell in sheet.Cells["A:A"])
+                {
+                    counterColRange++;
+                    colRange = $"{colRange};{cell.Address}";
+                }
+                Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7;A8;A9;A10;A11;A12", colRange);
+                Assert.AreEqual(12, counterColRange);
+
+
+
+
+
+               // var cellA13 = sheet.Cells["A13"];
+                var cellB13 = sheet.Cells["B13"];
+                var cellC13 = sheet.Cells["C13"];
+                var cellD13 = sheet.Cells["D13"];
+                var cellE13 = sheet.Cells["E13"];
+                var cellF13 = sheet.Cells["F13"];
+                //var cellG13 = sheet.Cells["G13"];
+                var cellH13 = sheet.Cells["H13"];
+                var cellI13 = sheet.Cells["I13"];
+                var cellJ13 = sheet.Cells["J13"];
+                var cellK13 = sheet.Cells["K13"];
+                var cellL13 = sheet.Cells["L13"];
+                //cellA13.Value = 1;
+                cellB13.Value = 1;
+                cellC13.Value = 1;
+                cellD13.Value = 1;
+                cellE13.Value = 1;
+                cellF13.Value = 1;
+                //cellG13.Value = 1;
+                cellH13.Value = 1;
+                cellI13.Value = 1;
+                cellJ13.Value = 1;
+                cellK13.Value = 1;
+                cellL13.Formula = "SUM(A1:A3,A5,A6,A7,A8,A10,A9,A11)";
+
+                int counterHorizontal = 0;
+                String rows = String.Empty;
+                foreach (var cell in sheet.Cells["13:13"])
+                {
+                    counterHorizontal++;
+                    rows = $"{rows};{cell.Address}";
+                }
+                Assert.AreEqual(";B13;C13;D13;E13;F13;H13;I13;J13;K13;L13", rows);
+                Assert.AreEqual(10, counterHorizontal);
+
+                counterHorizontal = 0;
+                rows = String.Empty;
+                foreach (var cell in sheet.Cells["13:13"])
+                {
+                    counterHorizontal++;
+                    rows = $"{rows};{cell.Address}";
+                }
+                Assert.AreEqual(";B13;C13;D13;E13;F13;H13;I13;J13;K13;L13", rows);
+                Assert.AreEqual(10, counterHorizontal);
 
             }
         }

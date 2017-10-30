@@ -18,7 +18,6 @@ namespace OfficeOpenXml.FormulaParsing
             internal ExcelWorksheet _ws;
             CellsStoreEnumerator<ExcelCoreValue> _values = null;
             int _fromRow, _toRow, _fromCol, _toCol;
-            int _cellCount = 0;
             ExcelAddressBase _address;
             ICellInfo _cell;
 
@@ -33,6 +32,8 @@ namespace OfficeOpenXml.FormulaParsing
                 _address._ws = ws.Name;
                 _values = new CellsStoreEnumerator<ExcelCoreValue>(ws._values, _fromRow, _fromCol, _toRow, _toCol);
                 _cell = new CellInfo(_ws, _values);
+                IsEmpty = !_values.Any();
+                IsMulti = GetIsMulti();
             }
 
             public RangeInfo(ExcelWorksheet ws, ExcelAddressBase address)
@@ -46,6 +47,8 @@ namespace OfficeOpenXml.FormulaParsing
                 _address._ws = ws.Name;
                 _values = new CellsStoreEnumerator<ExcelCoreValue>(ws._values, _fromRow, _fromCol, _toRow, _toCol);
                 _cell = new CellInfo(_ws, _values);
+                IsEmpty = !_values.Any();
+                IsMulti = GetIsMulti();
             }
 
             public int GetNCells()
@@ -53,49 +56,9 @@ namespace OfficeOpenXml.FormulaParsing
                 return ((_toRow - _fromRow) + 1) * ((_toCol - _fromCol) + 1);
             }
 
-            public bool IsEmpty
-            {
-                get
-                {
-                    if (_cellCount > 0)
-                    {
-                        return false;
-                    }
-                    else if (_values.Next())
-                    {
-                        _values.Reset();
-                        return false;
-                    }
-                    else
-                    {
-                        return true;
-                    }
-                }
-            }
-            public bool IsMulti
-            {
-                get
-                {
-                    if (_cellCount == 0)
-                    {
-                        if (_values.Next() && _values.Next())
-                        {
-                            _values.Reset();
-                            return true;
-                        }
-                        else
-                        {
-                            _values.Reset();
-                            return false;
-                        }
-                    }
-                    else if (_cellCount > 1)
-                    {
-                        return true;
-                    }
-                    return false;
-                }
-            }
+            public bool IsEmpty { get; }
+            
+            public bool IsMulti { get; }
 
             public ICellInfo Current
             {
@@ -124,7 +87,6 @@ namespace OfficeOpenXml.FormulaParsing
 
             public bool MoveNext()
             {
-                _cellCount++;
                 return _values.MoveNext();
             }
 
@@ -136,7 +98,6 @@ namespace OfficeOpenXml.FormulaParsing
 
             public bool NextCell()
             {
-                _cellCount++;
                 return _values.MoveNext();
             }
 
@@ -171,6 +132,18 @@ namespace OfficeOpenXml.FormulaParsing
                 {
                     return _ws.GetValue(_values.Row + rowOffset, _values.Column + colOffset);
                 }
+            }
+
+            private bool GetIsMulti()
+            {
+                if (_values.Next() && _values.Next())
+                {
+                    _values.Reset();
+                    return true;
+                }
+
+                _values.Reset();
+                return false;
             }
         }
 

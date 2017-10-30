@@ -229,6 +229,10 @@
     <None Include="packages.config" />
     <EmbeddedResource Include="Resources\Vector Drawing.wmf" />
     <EmbeddedResource Include="Resources\Vector Drawing2.wmf" />
+    <None Include="Resources\Issue15347Test.xlsx" />
+    <None Include="Resources\Reproduce_StandardStyle_Issue15361.xlsx" />
+    <None Include="Resources\TestDoc_NamedRangeInFormula.xlsx" />
+    <None Include="Resources\TestFile_Issue15399.xlsx" />
     <None Include="Workbooks\FormulaTest.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

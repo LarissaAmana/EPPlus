@@ -12,6 +12,7 @@ using System.Data;
 using OfficeOpenXml.Table;
 using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
+using EPPlusTest.Properties;
 using OfficeOpenXml.Table.PivotTable;
 using Rhino.Mocks;
 using OfficeOpenXml.Drawing.Chart;
@@ -2144,6 +2145,23 @@ namespace EPPlusTest
             }
         }
 
+        [TestMethod]
+        public void Issue_WithNamedRanges()
+        {
+            var excelTestFile = Resources.TestDoc_NamedRangeInFormula_xlsx;
+            using (MemoryStream excelStream = new MemoryStream())
+            {
+                excelStream.Write(excelTestFile, 0, excelTestFile.Length);
+
+                using (ExcelPackage exlPackage = new ExcelPackage(excelStream))
+                {
+                    exlPackage.Workbook.Worksheets.First().Cells["A1"].Value = "Changed Value";
+                    exlPackage.Workbook.Calculate();
+
+                    Assert.AreEqual("Changed Value", exlPackage.Workbook.Worksheets.First().Cells["A4"].Value.ToString());
+                }
+            }
+        }
         public int Index { get; }
         public void MoveIndexPointerForward()
         {

@@ -112,6 +112,11 @@
     <Compile Include="FormulaParsing\ExpressionGraph\CompileResultTests.cs" />
     <Compile Include="FormulaParsing\ExpressionGraph\FunctionCompilers\FunctionCompilerFactoryTests.cs" />
     <Compile Include="FormulaParsing\FormulaParserManagerTests.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Utils\ConvertUtilTest.cs" />
     <Compile Include="DataValidation\CustomValidationTests.cs" />
     <Compile Include="DataValidation\DataValidationTests.cs" />
@@ -205,11 +210,6 @@
     <Compile Include="FormulaParsing\TestHelpers\FunctionsHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DrawingTest.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="ReadTemplate.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestDTO.cs" />
@@ -230,6 +230,7 @@
     <EmbeddedResource Include="Resources\Vector Drawing.wmf" />
     <EmbeddedResource Include="Resources\Vector Drawing2.wmf" />
     <None Include="Resources\Issue15347Test.xlsx" />
+    <None Include="Resources\Issue_KeyNotFoundSaveProblem.xlsx" />
     <None Include="Resources\Reproduce_StandardStyle_Issue15361.xlsx" />
     <None Include="Resources\TestDoc_NamedRangeInFormula.xlsx" />
     <None Include="Resources\TestFile_Issue15399.xlsx" />
@@ -240,8 +241,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

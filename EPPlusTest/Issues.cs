@@ -696,6 +696,23 @@ namespace EPPlusTest
                 var t = ws.Cells["A1"].Text;
             }
         }
+
+        [TestMethod]
+        public void Issue_KeyNotFoundSaveProblem()
+        {
+            using (var file = new MemoryStream())
+            {
+                file.Write(EPPlusTest.Properties.Resources.Issue_KeyNotFoundSaveProblem, 0,
+                    EPPlusTest.Properties.Resources.Issue_KeyNotFoundSaveProblem.Length);
+                using (ExcelPackage package = new ExcelPackage(file))
+
+                {
+                    
+                    package.SaveAs(new FileInfo(@"Pleas insert a path"));
+                }
+            }
+        }
+
         [TestMethod, Ignore]
         public void Issue15213()
         {

@@ -33,6 +33,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Xml;
 namespace OfficeOpenXml.Style.XmlAccess
@@ -294,6 +295,14 @@ namespace OfficeOpenXml.Style.XmlAccess
 
         private static float GetHeightByName(string name, float size)
         {
+            if (size < FontSize.FontHeights[name].Keys.Min())
+            {
+                
+                var minKey = FontSize.FontHeights[name].Keys.Min();
+                return FontSize.FontHeights[name][minKey].Height;
+
+            }
+            
             if (FontSize.FontHeights[name].ContainsKey(size))
             {
                 return FontSize.FontHeights[name][size].Height;
@@ -301,6 +310,7 @@ namespace OfficeOpenXml.Style.XmlAccess
             else
             {
                 float min = -1, max = 500;
+
                 foreach (var h in FontSize.FontHeights[name])
                 {
                     if (min < h.Key && h.Key < size)

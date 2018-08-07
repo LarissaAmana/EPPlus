@@ -2179,6 +2179,74 @@ namespace EPPlusTest
                 }
             }
         }
+
+        [TestMethod]
+        public void Issue_WithRangeCalculation()
+        {
+            //Issue: If two namedRanges (columns with Names) are calculated like "=range1 + range2" Only the first row of the ranges are calculated and the result is copied to the rest of the rows from the resultcolumn. 
+            var excelTestFile = Resources.Issue_WithRangeCalculation;
+            using (MemoryStream excelStream = new MemoryStream())
+            {
+                excelStream.Write(excelTestFile, 0, excelTestFile.Length);
+
+                using (ExcelPackage exlPackage = new ExcelPackage(excelStream))
+                {
+                    var ws = exlPackage.Workbook.Worksheets[1];
+                    ws.Calculate();
+
+                    //range in range in Fomular
+                    Assert.AreEqual(311d, ws.Cells["C1"].Value);
+                    Assert.AreEqual(306d, ws.Cells["C2"].Value);
+
+                    //range1+range2 horizontal
+                    Assert.AreEqual(103d, ws.Cells["C3"].Value);
+                    Assert.AreEqual(104d, ws.Cells["C4"].Value);
+                    Assert.AreEqual(105d, ws.Cells["C5"].Value);
+                    Assert.AreEqual(106d, ws.Cells["C6"].Value);
+                    Assert.AreEqual(107d, ws.Cells["C7"].Value);
+                    Assert.AreEqual(108d, ws.Cells["C8"].Value);
+                    Assert.AreEqual(109d, ws.Cells["C9"].Value);
+                    Assert.AreEqual(110d, ws.Cells["C10"].Value);
+
+                    Assert.AreEqual(112d, ws.Cells["C12"].Value);
+                    Assert.AreEqual(113d, ws.Cells["C13"].Value);
+                    Assert.AreEqual(114d, ws.Cells["C14"].Value);
+                    
+                    //range3+range4 vertical
+                    Assert.AreEqual(101d, ws.Cells["F21"].Value);
+                    Assert.AreEqual(102d, ws.Cells["G21"].Value);
+                    Assert.AreEqual(103d, ws.Cells["H21"].Value);
+                    Assert.AreEqual(104d, ws.Cells["I21"].Value);
+                    Assert.AreEqual(105d, ws.Cells["J21"].Value);
+                    Assert.AreEqual(106d, ws.Cells["K21"].Value);
+                    Assert.AreEqual(107d, ws.Cells["L21"].Value);
+                    Assert.AreEqual(108d, ws.Cells["M21"].Value);
+                    Assert.AreEqual(109d, ws.Cells["N21"].Value);
+                    Assert.AreEqual(110d, ws.Cells["O21"].Value);
+                    Assert.AreEqual(111d, ws.Cells["P21"].Value);
+                    Assert.AreEqual(112d, ws.Cells["Q21"].Value);
+                    Assert.AreEqual(113d, ws.Cells["R21"].Value);
+
+                    //Normal
+                    Assert.AreEqual(198d, ws.Cells["C18"].Value);
+
+                    //String
+                    Assert.AreEqual("#VALUE!", ws.Cells["C19"].Value.ToString());
+                    Assert.AreEqual("#VALUE!", ws.Cells["C15"].Value.ToString());
+
+                    //Empty Cell
+                    Assert.AreEqual(100d, ws.Cells["C11"].Value);
+                    Assert.AreEqual(20d, ws.Cells["C20"].Value);
+
+                }
+            }
+        }
+
+       
+
+
+
+
         public int Index { get; }
         public void MoveIndexPointerForward()
         {

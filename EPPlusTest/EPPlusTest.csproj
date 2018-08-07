@@ -231,6 +231,7 @@
     <EmbeddedResource Include="Resources\Vector Drawing2.wmf" />
     <None Include="Resources\Issue15347Test.xlsx" />
     <None Include="Resources\Issue_KeyNotFoundSaveProblem.xlsx" />
+    <None Include="Resources\Issue_WithRangeCalculation.xlsx" />
     <None Include="Resources\Reproduce_StandardStyle_Issue15361.xlsx" />
     <None Include="Resources\TestDoc_NamedRangeInFormula.xlsx" />
     <None Include="Resources\TestFile_Issue15399.xlsx" />
@@ -241,6 +242,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>

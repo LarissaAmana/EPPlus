@@ -49,10 +49,11 @@ namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
 
 		private double? _ResultNumeric;
 
-        public CompileResult(object result, DataType dataType)
+        public CompileResult(object result, DataType dataType, ParsingScope c = null)
         {
             Result = result;
             DataType = dataType;
+            _context = c;
         }
 
         public CompileResult(eErrorType errorType)
@@ -73,6 +74,8 @@ namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
             get;
             private set;
         }
+
+        private ParsingScope _context;
 
         public object ResultValue
         {
@@ -101,18 +104,25 @@ namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
 					{
 						_ResultNumeric = Result == null ? 0 : Convert.ToDouble(Result);
 					}
-					else if (Result is DateTime)
+					else if (Result is DateTime datetime)
 					{
-						_ResultNumeric = ((DateTime)Result).ToOADate();
+						_ResultNumeric = datetime.ToOADate();
 					}
-					else if (Result is TimeSpan)
+					else if (Result is TimeSpan timespan)
 					{
-						_ResultNumeric = DateTime.FromOADate(0).Add((TimeSpan)Result).ToOADate();
+						_ResultNumeric = DateTime.FromOADate(0).Add(timespan).ToOADate();
 					}
-					else if (Result is ExcelDataProvider.IRangeInfo)
+					else if (Result is ExcelDataProvider.IRangeInfo range)
 					{
-						var c = ((ExcelDataProvider.IRangeInfo)Result).FirstOrDefault();
-						if (c == null)
+					    
+                        if (CheckRangeCalculationPreConditions(range))
+                        {
+                            return GetValueForCurrentContextCell(range);
+                        }
+
+					    var c = ((ExcelDataProvider.IRangeInfo)Result).FirstOrDefault();
+
+                        if (c == null)
 						{
 							return 0;
 						}
@@ -121,12 +131,15 @@ namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
 							return c.ValueDoubleLogical;
 						}
 					}
-					// The IsNumericString and IsDateString properties will set _ResultNumeric for efficiency so we just need
-					// to check them here.
-					else if (!IsNumericString && !IsDateString)
-					{
-						_ResultNumeric = 0;
-					}
+				    else if (DataType == DataType.ExcelError)
+				        return double.NaN;
+
+				    // The IsNumericString and IsDateString properties will set _ResultNumeric for efficiency so we just need
+				    // to check them here.
+				    else if (!IsNumericString && !IsDateString)
+				    {
+				        _ResultNumeric = 0;
+				    }
 				}
 				return _ResultNumeric.Value;
             }
@@ -177,5 +190,61 @@ namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
 		public bool IsResultOfSubtotal { get; set; }
 
         public bool IsHiddenCell { get; set; }
+
+        private bool CheckRangeCalculationPreConditions(ExcelDataProvider.IRangeInfo range)
+        {
+            if (_context != null)
+            {
+                return (range.Address._fromRow != range.Address._toRow && range.Address._fromCol == range.Address._toCol
+                        || range.Address._fromCol != range.Address._toCol && range.Address._fromRow == range.Address._toRow);
+
+            }
+
+            return false;
+        }
+
+
+
+        private double GetValueForCurrentContextCell(ExcelDataProvider.IRangeInfo range)
+        {
+            var value = range.Address._fromRow == range.Address._toRow
+                ? range.GetValue(range.Address._fromRow, _context.Address.FromCol)
+                : range.GetValue(_context.Address.FromRow, range.Address._fromCol);
+
+            DataType = GetDataTypeForValue(value);
+
+            var newCompileResult = new CompileResult(value, DataType, _context);
+
+            return newCompileResult.ResultNumeric;
+        }
+
+
+        private DataType GetDataTypeForValue(object value)
+        {
+
+            if (value == null)
+                return DataType.Empty;
+
+            return IsNumber(value)
+                ? DataType.Decimal
+                : DataType.ExcelError;
+
+            
+            
+        }
+
+        private static bool IsNumber(object value)
+            => value is sbyte
+               || value is byte
+               || value is short
+               || value is ushort
+               || value is int
+               || value is uint
+               || value is long
+               || value is ulong
+               || value is float
+               || value is double
+               || value is decimal;
+
     }
 }

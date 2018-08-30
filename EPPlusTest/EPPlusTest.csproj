@@ -229,6 +229,7 @@
     <None Include="packages.config" />
     <EmbeddedResource Include="Resources\Vector Drawing.wmf" />
     <EmbeddedResource Include="Resources\Vector Drawing2.wmf" />
+    <None Include="Resources\ExternalReferences.xlsx" />
     <None Include="Resources\Issue15347Test.xlsx" />
     <None Include="Resources\Issue_KeyNotFoundSaveProblem.xlsx" />
     <None Include="Resources\Issue_WithRangeCalculation.xlsx" />

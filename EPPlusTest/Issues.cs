@@ -2242,7 +2242,29 @@ namespace EPPlusTest
             }
         }
 
-       
+
+
+        [TestMethod]
+        public void IssueWithExternalFormulas()
+        {
+            //Issue: If a formula contains external links the old value should be used instead of resulting in #NAME-Error
+            var excelTestFile = Resources.ExternalReferences;
+            using (MemoryStream excelStream = new MemoryStream())
+            {
+                excelStream.Write(excelTestFile, 0, excelTestFile.Length);
+
+                using (ExcelPackage exlPackage = new ExcelPackage(excelStream))
+                {
+                    var ws = exlPackage.Workbook.Worksheets[1];
+                    ws.Calculate();
+
+
+                    Assert.AreEqual(40d, ws.Cells["A1"].Value);
+
+                }
+            }
+        }
+
 
 
 

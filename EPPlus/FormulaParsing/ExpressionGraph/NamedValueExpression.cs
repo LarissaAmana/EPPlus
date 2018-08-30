@@ -32,6 +32,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
 {
@@ -50,9 +51,14 @@ namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
             var c = this._parsingContext.Scopes.Current;
             var name = _parsingContext.ExcelDataProvider.GetName(c.Address.Worksheet, ExpressionString);
             //var result = _parsingContext.Parser.Parse(value.ToString());
-
+            
             if (name == null)
             {
+                if (ExpressionStringIsExternal(ExpressionString)) 
+                {
+                    throw new Exceptions.ExternalLinkException("formula contains external Link");
+
+                }
                 throw (new Exceptions.ExcelErrorValueException(ExcelErrorValue.Create(eErrorType.Name)));
             }
             if (name.Value==null)
@@ -85,6 +91,12 @@ namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
             
             
             //return new CompileResultFactory().Create(result);
+        }
+
+        private bool ExpressionStringIsExternal(string ExpressionString) 
+        {
+            return Regex.IsMatch(ExpressionString, @"^  \s*   \[  \d+  \]", 
+                RegexOptions.IgnorePatternWhitespace);
         }
     }
 }

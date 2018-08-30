@@ -31,6 +31,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using OfficeOpenXml.FormulaParsing.Excel.Operators;
 using OfficeOpenXml.FormulaParsing.Exceptions;
@@ -91,7 +92,8 @@ namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
             var expression = this;
             if (Next != null && Operator != null)
             {
-                var result = Operator.Apply(Compile(), Next.Compile());
+
+                var result = Operator.Apply(tryCompile(this), tryCompile(Next)); 
                 if (result.IsNumeric
                     && double.IsNaN(result.ResultNumeric))
                 {
@@ -126,6 +128,19 @@ namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
                 Prev.Next = expression;
             }            
             return expression;
+        }
+
+        private CompileResult tryCompile(Expression exp) 
+        {
+            try
+            {
+                return exp.Compile();
+            }
+            catch (Exceptions.ExternalLinkException)
+            {
+
+                    return exp.Prev.Compile();
+            }
         }
 
         public abstract CompileResult Compile();

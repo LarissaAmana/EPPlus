@@ -63,7 +63,17 @@ namespace EPPlusTest.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] Issue_KeyNotFoundSaveProblem {
+        internal static byte[] ExternalReferences {
+            get {
+                object obj = ResourceManager.GetObject("ExternalReferences", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+internal static byte[] Issue_KeyNotFoundSaveProblem {
             get {
                 object obj = ResourceManager.GetObject("Issue_KeyNotFoundSaveProblem", resourceCulture);
                 return ((byte[])(obj));

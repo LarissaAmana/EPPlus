@@ -2258,12 +2258,128 @@ namespace EPPlusTest
                     var ws = exlPackage.Workbook.Worksheets[1];
                     ws.Calculate();
 
+                    Assert.AreEqual(60d, ws.Cells["A1"].Value);
+                    Assert.AreEqual(60d, ws.Cells["A2"].Value);
+                    Assert.AreEqual(23d, ws.Cells["B19"].Value);
+                    Assert.AreEqual(23d, ws.Cells["B20"].Value);
 
-                    Assert.AreEqual(40d, ws.Cells["A1"].Value);
+
 
                 }
             }
         }
+
+
+
+        [TestMethod]
+        public void IssueWithExternalFormulasKnauf()
+        {
+            //Issue: If a formula contains external links the old value should be used instead of resulting in #NAME-Error
+            var excelTestFile = Resources.SN_T_1535637796_Geschäftsentwicklung_von_Knauf_Unte;
+            using (MemoryStream excelStream = new MemoryStream())
+            {
+                excelStream.Write(excelTestFile, 0, excelTestFile.Length);
+
+                using (ExcelPackage exlPackage = new ExcelPackage(excelStream))
+                {
+                    var ws = exlPackage.Workbook.Worksheets[2];
+                    ws.Calculate();
+
+                    for(int i=9; i<=148; i++)
+                    Assert.AreEqual(ws.Cells[i,3].Value, ws.Cells[(i+140),3].Value);
+                    
+
+
+
+                }
+            }
+        }
+
+        [TestMethod]
+        public void IssueWithRoman()
+        {
+            //Issue: Roman is not implementet
+            var excelTestFile = Resources.Roman_allNumbers;
+            using (MemoryStream excelStream = new MemoryStream())
+            {
+                excelStream.Write(excelTestFile, 0, excelTestFile.Length);
+
+                using (ExcelPackage exlPackage = new ExcelPackage(excelStream))
+                {
+                    var ws = exlPackage.Workbook.Worksheets[1];
+
+                    ws.Calculate();
+                    
+                    //no Parameter
+                    for(int i=1; i<=ws.Cells["A:A"].Count(); i++)
+                            Assert.AreEqual(ws.Cells[i, 1].Value, ws.Cells[i, (1+11)].Value);
+                        
+                    //Parameter 0
+                    for (int i = 1; i <= ws.Cells["B:B"].Count(); i++)
+                        Assert.AreEqual(ws.Cells[i, 2].Value, ws.Cells[i, (2+11)].Value);
+                    //Parameter 1
+                    for (int i = 1; i <= ws.Cells["C:C"].Count(); i++)
+                        Assert.AreEqual(ws.Cells[i, 3].Value, ws.Cells[i, (3+11)].Value);
+                    //Parameter 2
+                    for (int i = 1; i <= ws.Cells["D:D"].Count(); i++)
+                        Assert.AreEqual(ws.Cells[i, 4].Value, ws.Cells[i, (4+11)].Value);
+                    //Parameter 3
+                    for (int i = 1; i <= ws.Cells["E:E"].Count(); i++)
+                        Assert.AreEqual(ws.Cells[i, 5].Value, ws.Cells[i, (5+11)].Value);
+                    //Parameter 4
+                    for (int i = 1; i <= ws.Cells["F:F"].Count(); i++)
+                        Assert.AreEqual(ws.Cells[i, 6].Value, ws.Cells[i, (6+11)].Value);
+                    //Parameter TRUE
+                    for (int i = 1; i <= ws.Cells["G:G"].Count(); i++)
+                        Assert.AreEqual(ws.Cells[i, 7].Value, ws.Cells[i, (7 + 11)].Value);
+                    //Parameter FALSE
+                    for (int i = 1; i <= ws.Cells["H:H"].Count(); i++)
+                        Assert.AreEqual(ws.Cells[i, 7].Value, ws.Cells[i, (7 + 11)].Value);
+
+                }
+            }
+        }
+
+        [TestMethod]
+        public void IssueWithRomanSMALL()
+        {
+            //Issue: Roman is not implementet
+            var excelTestFile = Resources.Roman;
+            using (MemoryStream excelStream = new MemoryStream())
+            {
+                excelStream.Write(excelTestFile, 0, excelTestFile.Length);
+
+                using (ExcelPackage exlPackage = new ExcelPackage(excelStream))
+                {
+                    var ws = exlPackage.Workbook.Worksheets[1];
+
+                    ws.Calculate();
+
+                    //Parameter
+                    Assert.AreEqual(ws.Cells["A1"].Value, ws.Cells["B1"].Value);
+                    Assert.AreEqual(ws.Cells["A2"].Value, ws.Cells["B2"].Value);
+                    Assert.AreEqual(ws.Cells["A3"].Value, ws.Cells["B3"].Value);
+                    Assert.AreEqual(ws.Cells["A4"].Value, ws.Cells["B4"].Value);
+                    Assert.AreEqual(ws.Cells["A5"].Value, ws.Cells["B5"].Value);
+                    Assert.AreEqual(ws.Cells["A6"].Value, ws.Cells["B6"].Value);
+                    Assert.AreEqual(ws.Cells["A7"].Value, ws.Cells["B7"].Value);
+                    Assert.AreEqual(ws.Cells["A8"].Value, ws.Cells["B8"].Value);
+                    Assert.AreEqual(ws.Cells["A9"].Value, ws.Cells["B9"].Value);
+                    Assert.AreEqual(ws.Cells["A10"].Value, ws.Cells["B10"].Value);
+
+
+                    //wrong Parameter
+                    Assert.AreEqual(ws.Cells["C1"].Value, ws.Cells["D1"].Value);
+                    Assert.AreEqual(ws.Cells["C2"].Value, ws.Cells["D2"].Value);
+                    Assert.AreEqual(ws.Cells["C3"].Value, ws.Cells["D3"].Value);
+                    Assert.AreEqual(ws.Cells["C4"].Value, ws.Cells["D4"].Value);
+                    Assert.AreEqual(ws.Cells["C5"].Value, String.Empty);
+                }
+            }
+        }
+
+        
+
 
 
 

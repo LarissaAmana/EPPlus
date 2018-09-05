@@ -142,6 +142,39 @@ namespace OfficeOpenXml.FormulaParsing.Excel.Functions
                 }, errorTypeToThrow);
         }
 
+                /// <summary>
+        /// This functions validates that the supplied <paramref name="arguments"/> contains at least
+        /// (the value of) <paramref name="minLength"/> elements. If one of the arguments is an
+        /// <see cref="ExcelDataProvider.IRangeInfo">Excel range</see> the number of cells in
+        /// that range will be counted as well.
+        /// </summary>
+        /// <param name="arguments"></param>
+        /// <param name="minLength"></param>
+        /// <param name="errorTypeToThrow">The <see cref="eErrorType"/> of the <see cref="ExcelErrorValueException"/> that will be thrown if <paramref name="minLength"/> is not met.</param>
+        protected void ValidateArguments(IEnumerable<FunctionArgument> arguments, int minLength, int maxLength,
+                                         eErrorType errorTypeToThrow)
+        {
+            Require.That(arguments).Named("arguments").IsNotNull();
+            ThrowExcelErrorValueExceptionIf(() =>
+                {
+                    var nArgs = 0;
+                    if (arguments.Any())
+                    {
+                        foreach (var arg in arguments)
+                        {
+                            nArgs++;
+                            if (nArgs<= maxLength && nArgs >= minLength) return false;
+                            if (arg.IsExcelRange)
+                            {
+                                nArgs += arg.ValueAsRangeInfo.GetNCells();
+                                if (nArgs <= maxLength && nArgs >= minLength) return false;
+                            }
+                        }
+                    }
+                    return true;
+                }, errorTypeToThrow);
+        }
+
         /// <summary>
         /// This functions validates that the supplied <paramref name="arguments"/> contains at least
         /// (the value of) <paramref name="minLength"/> elements. If one of the arguments is an

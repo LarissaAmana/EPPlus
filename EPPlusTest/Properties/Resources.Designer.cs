@@ -103,6 +103,26 @@ internal static byte[] Issue_KeyNotFoundSaveProblem {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] Roman {
+            get {
+                object obj = ResourceManager.GetObject("Roman", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Roman_allNumbers {
+            get {
+                object obj = ResourceManager.GetObject("Roman_allNumbers", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] Reproduce_StandardStyle_Issue15361 {
             get {
                 object obj = ResourceManager.GetObject("Reproduce_StandardStyle_Issue15361", resourceCulture);

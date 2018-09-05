@@ -113,6 +113,7 @@ namespace OfficeOpenXml.FormulaParsing.Excel.Functions
             Functions["round"] = new Round();
             Functions["rounddown"] = new Rounddown();
             Functions["roundup"] = new Roundup();
+            Functions["roman"] = new Roman();
             Functions["rand"] = new Rand();
             Functions["randbetween"] = new RandBetween();
             Functions["rank"] = new Rank();

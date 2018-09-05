@@ -93,7 +93,7 @@ namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
             if (Next != null && Operator != null)
             {
 
-                var result = Operator.Apply(tryCompile(this), tryCompile(Next)); 
+                var result = Operator.Apply(Compile(), Next.Compile()); 
                 if (result.IsNumeric
                     && double.IsNaN(result.ResultNumeric))
                 {
@@ -128,19 +128,6 @@ namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
                 Prev.Next = expression;
             }            
             return expression;
-        }
-
-        private CompileResult tryCompile(Expression exp) 
-        {
-            try
-            {
-                return exp.Compile();
-            }
-            catch (Exceptions.ExternalLinkException)
-            {
-
-                    return exp.Prev.Compile();
-            }
         }
 
         public abstract CompileResult Compile();

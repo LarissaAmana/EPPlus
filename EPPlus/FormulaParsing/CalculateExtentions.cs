@@ -157,6 +157,11 @@ namespace OfficeOpenXml
                 {
                     throw (fe);
                 }
+                catch (ExternalLinkException)
+                {
+                    continue;
+
+                }
                 catch(Exception e)
                 {
                     var error = ExcelErrorValue.Parse(ExcelErrorValue.Values.Value);

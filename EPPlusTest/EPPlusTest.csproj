@@ -234,6 +234,8 @@
     <None Include="Resources\Issue_KeyNotFoundSaveProblem.xlsx" />
     <None Include="Resources\Issue_WithRangeCalculation.xlsx" />
     <None Include="Resources\Reproduce_StandardStyle_Issue15361.xlsx" />
+    <None Include="Resources\Roman.xlsx" />
+    <None Include="Resources\Roman_allNumbers.xlsx" />
     <None Include="Resources\TestDoc_NamedRangeInFormula.xlsx" />
     <None Include="Resources\TestFile_Issue15399.xlsx" />
     <None Include="Workbooks\FormulaTest.xlsx">

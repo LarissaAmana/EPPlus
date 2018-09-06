@@ -34,6 +34,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using OfficeOpenXml.FormulaParsing.Exceptions;
 using OfficeOpenXml.Utils;
 
 namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
@@ -117,6 +118,8 @@ namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
 					    
                         if (CheckRangeCalculationPreConditions(range))
                         {
+                            if (ContextOutOfRange(range))
+                                throw new ExcelErrorValueException(eErrorType.Value);
                             return GetValueForCurrentContextCell(range);
                         }
 
@@ -203,6 +206,20 @@ namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
             return false;
         }
 
+        private bool ContextOutOfRange(ExcelDataProvider.IRangeInfo range)
+        {
+            if (_context != null)
+            {
+                if (range.Address._fromCol == range.Address._toCol) //Column
+                    return !(_context.Address.FromRow  >= range.Address._fromRow 
+                            && _context.Address.ToRow <= range.Address._toRow);
+                else if (range.Address._fromRow == range.Address._toRow) //Row
+                    return !(_context.Address.FromCol >= range.Address._fromCol
+                            && _context.Address.ToCol <= range.Address._toCol);
+            }
+
+            return false;
+        }
 
 
         private double GetValueForCurrentContextCell(ExcelDataProvider.IRangeInfo range)

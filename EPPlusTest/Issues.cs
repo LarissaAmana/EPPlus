@@ -2227,6 +2227,28 @@ namespace EPPlusTest
                     Assert.AreEqual(112d, ws.Cells["Q21"].Value);
                     Assert.AreEqual(113d, ws.Cells["R21"].Value);
 
+                    //When Issue_WithRangeCalculation_IF
+                    Assert.AreEqual(306d, ws.Cells["H2"].Value);
+                    Assert.AreEqual(103d, ws.Cells["H3"].Value);
+                    Assert.AreEqual(104d, ws.Cells["H4"].Value);
+                    Assert.AreEqual(105d, ws.Cells["H5"].Value);
+
+                    Assert.AreEqual(100d, ws.Cells["I2"].Value);
+                    Assert.AreEqual(100d, ws.Cells["I3"].Value);
+                    Assert.AreEqual(100d, ws.Cells["I4"].Value);
+                    Assert.AreEqual(100d, ws.Cells["I5"].Value);
+
+                    Assert.AreEqual(100d, ws.Cells["J2"].Value);
+                    Assert.AreEqual(100d, ws.Cells["J3"].Value);
+                    Assert.AreEqual(100d, ws.Cells["J4"].Value);
+                    Assert.AreEqual(100d, ws.Cells["J5"].Value);
+
+                    Assert.AreEqual("Falsche Auswahl", ws.Cells["K2"].Value);
+                    Assert.AreEqual("Falsche Auswahl", ws.Cells["K3"].Value);
+                    Assert.AreEqual("Falsche Auswahl", ws.Cells["K4"].Value);
+                    Assert.AreEqual("Falsche Auswahl", ws.Cells["K5"].Value);
+
+
                     //Normal
                     Assert.AreEqual(198d, ws.Cells["C18"].Value);
 
@@ -2237,6 +2259,26 @@ namespace EPPlusTest
                     //Empty Cell
                     Assert.AreEqual(100d, ws.Cells["C11"].Value);
                     Assert.AreEqual(20d, ws.Cells["C20"].Value);
+
+                    //OutOfRange IF
+                    Assert.AreEqual("#VALUE!", ws.Cells["H1"].Value.ToString());
+                    Assert.AreEqual("#VALUE!", ws.Cells["I1"].Value.ToString());
+                    Assert.AreEqual("#VALUE!", ws.Cells["J1"].Value.ToString());
+                    Assert.AreEqual("Falsche Auswahl", ws.Cells["K1"].Value);
+                    Assert.AreEqual("#VALUE!", ws.Cells["H6"].Value.ToString());
+                    Assert.AreEqual("#VALUE!", ws.Cells["I6"].Value.ToString());
+                    Assert.AreEqual("#VALUE!", ws.Cells["J6"].Value.ToString());
+                    Assert.AreEqual("Falsche Auswahl", ws.Cells["K6"].Value);
+
+                    //OutOfRange Normal
+                    Assert.AreEqual("#VALUE!", ws.Cells["C16"].Value.ToString());
+                    Assert.AreEqual("#VALUE!", ws.Cells["E21"].Value.ToString());
+                    Assert.AreEqual("#VALUE!", ws.Cells["S21"].Value.ToString());
+
+
+                    //Check if something in if is fixed wrong
+                    Assert.AreEqual(2d, ws.Cells["F11"].Value);
+                    Assert.AreEqual(1d, ws.Cells["F12"].Value);
 
                 }
             }

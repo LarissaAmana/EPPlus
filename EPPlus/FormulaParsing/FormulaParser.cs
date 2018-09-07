@@ -147,6 +147,12 @@ namespace OfficeOpenXml.FormulaParsing
                         {
                             return rangeInfo.First().Value ?? 0d;
                         }
+
+                        if (rangeInfo.IsMulti && rangeIsRowOrColumn(rangeInfo))
+                        {
+                            return compileResult.ResultValue;
+
+                        }
                         // ok to return multicell if it is a workbook scoped name.
                         if (string.IsNullOrEmpty(worksheet))
                         {
@@ -172,7 +178,12 @@ namespace OfficeOpenXml.FormulaParsing
             }
         }
 
-        public virtual object Parse(string formula, string address)
+        private static bool rangeIsRowOrColumn(ExcelDataProvider.IRangeInfo rangeInfo)
+        {
+            return ((rangeInfo.Address._fromRow ==rangeInfo.Address._toRow) || (rangeInfo.Address._fromCol==rangeInfo.Address._toCol));
+        }
+
+    public virtual object Parse(string formula, string address)
         {
             return Parse(formula, _parsingContext.RangeAddressFactory.Create(address));
         }

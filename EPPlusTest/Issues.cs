@@ -2275,6 +2275,18 @@ namespace EPPlusTest
                     Assert.AreEqual("#VALUE!", ws.Cells["E21"].Value.ToString());
                     Assert.AreEqual("#VALUE!", ws.Cells["S21"].Value.ToString());
 
+                    //UseAGAIN
+                    Assert.AreEqual(206d, ws.Cells["F2"].Value);
+                    Assert.AreEqual(3d, ws.Cells["F3"].Value);
+                    Assert.AreEqual(4d, ws.Cells["F4"].Value);
+                    Assert.AreEqual(5d, ws.Cells["F5"].Value);
+                    //UseIFAGAIN
+                    Assert.AreEqual(306d, ws.Cells["M2"].Value);
+                    Assert.AreEqual(103d, ws.Cells["M3"].Value);
+                    Assert.AreEqual(104d, ws.Cells["M4"].Value);
+                    Assert.AreEqual(105d, ws.Cells["M5"].Value);
+                    Assert.AreEqual("#VALUE!", ws.Cells["M6"].Value.ToString());
+
 
                     //Check if something in if is fixed wrong
                     Assert.AreEqual(2d, ws.Cells["F11"].Value);
@@ -2283,7 +2295,6 @@ namespace EPPlusTest
                 }
             }
         }
-
 
 
         [TestMethod]

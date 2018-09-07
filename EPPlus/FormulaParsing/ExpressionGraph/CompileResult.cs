@@ -89,6 +89,13 @@ namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
                 }
                 else
                 {
+                    if (CheckRangeCalculationPreConditions(r))
+                        {
+                            if (ContextOutOfRange(r))
+                                throw new ExcelErrorValueException(eErrorType.Value);
+                            return GetCompileResultForCurrentContextCell(r).ResultValue;
+                        }
+
                     return r.GetValue(r.Address._fromRow, r.Address._fromCol);
                 }
             }
@@ -120,7 +127,7 @@ namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
                         {
                             if (ContextOutOfRange(range))
                                 throw new ExcelErrorValueException(eErrorType.Value);
-                            return GetValueForCurrentContextCell(range);
+                            return GetCompileResultForCurrentContextCell(range).ResultNumeric;
                         }
 
 					    var c = ((ExcelDataProvider.IRangeInfo)Result).FirstOrDefault();
@@ -222,7 +229,7 @@ namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
         }
 
 
-        private double GetValueForCurrentContextCell(ExcelDataProvider.IRangeInfo range)
+        private CompileResult GetCompileResultForCurrentContextCell(ExcelDataProvider.IRangeInfo range)
         {
             var value = range.Address._fromRow == range.Address._toRow
                 ? range.GetValue(range.Address._fromRow, _context.Address.FromCol)
@@ -230,9 +237,8 @@ namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
 
             DataType = GetDataTypeForValue(value);
 
-            var newCompileResult = new CompileResult(value, DataType, _context);
+            return new CompileResult(value, DataType, _context);
 
-            return newCompileResult.ResultNumeric;
         }
 
 

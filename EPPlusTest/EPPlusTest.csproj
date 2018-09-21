@@ -233,6 +233,7 @@
     <None Include="Resources\Issue15347Test.xlsx" />
     <None Include="Resources\Issue_KeyNotFoundSaveProblem.xlsx" />
     <None Include="Resources\Issue_WithRangeCalculation.xlsx" />
+    <None Include="Resources\Layout_Format_vorlage.xlsx" />
     <None Include="Resources\Reproduce_StandardStyle_Issue15361.xlsx" />
     <None Include="Resources\Roman.xlsx" />
     <None Include="Resources\Roman_allNumbers.xlsx" />
@@ -245,7 +246,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>

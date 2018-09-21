@@ -639,7 +639,8 @@ namespace OfficeOpenXml
 			}
 			return GetXmlNodeBool(path);
 		}
-		internal bool GetXmlNodeBool(string path)
+
+        internal bool GetXmlNodeBool(string path)
 		{
 			return GetXmlNodeBool(path, false);
 		}
@@ -756,9 +757,8 @@ namespace OfficeOpenXml
       {
         return "";
       }
-
+      
       XmlNode nameNode = node.SelectSingleNode(path, NameSpaceManager);
-
       if (nameNode != null)
       {
         if (nameNode.NodeType == XmlNodeType.Attribute)

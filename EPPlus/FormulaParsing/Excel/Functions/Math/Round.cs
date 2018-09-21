@@ -42,6 +42,7 @@ namespace OfficeOpenXml.FormulaParsing.Excel.Functions.Math
                 nDigits *= -1;
                 return CreateResult(number - (number % (System.Math.Pow(10, nDigits))), DataType.Integer); 
             }
+
             return CreateResult(System.Math.Round(number, nDigits), DataType.Decimal);
         }
     }

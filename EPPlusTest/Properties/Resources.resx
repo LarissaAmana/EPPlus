@@ -130,6 +130,9 @@
   <data name="Issue_WithRangeCalculation" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Issue_WithRangeCalculation.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Layout_Format_vorlage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Layout_Format_vorlage.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="Reproduce_StandardStyle_Issue15361" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Reproduce_StandardStyle_Issue15361.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

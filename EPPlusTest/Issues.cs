@@ -2322,6 +2322,66 @@ namespace EPPlusTest
             }
         }
 
+
+        [TestMethod]
+        public void IssueWithChangedCostumstyles()
+        {
+            //Issue: If the Custom / Built-in Styles are Saved not in EPPlus the information about their property gets lost 
+            var excelTestFile = Resources.Layout_Format_vorlage;
+            using (MemoryStream excelStream = new MemoryStream())
+            {
+                excelStream.Write(excelTestFile, 0, excelTestFile.Length);
+
+                using (ExcelPackage exlPackage = new ExcelPackage(excelStream))
+                {
+
+                    var styles = exlPackage.Workbook.Styles;
+                    Assert.AreEqual(0, styles.CellStyleXfs[0].NumberFormatId);
+                    Assert.AreEqual(0, styles.CellStyleXfs[0].FontId);
+                    Assert.AreEqual(0, styles.CellStyleXfs[0].FillId);
+                    Assert.AreEqual(0, styles.CellStyleXfs[0].BorderId);
+                    Assert.IsNull(styles.CellStyleXfs[0].ApplyNumberFormat);
+                    Assert.IsNull(styles.CellStyleXfs[0].ApplyFill);
+                    Assert.IsNull(styles.CellStyleXfs[0].ApplyBorder);
+                    Assert.IsNull(styles.CellStyleXfs[0].ApplyAlignment);
+                    Assert.IsNull(styles.CellStyleXfs[0].ApplyProtection);
+
+                    Assert.AreEqual(0, styles.CellStyleXfs[1].NumberFormatId);
+                    Assert.AreEqual(1, styles.CellStyleXfs[1].FontId);
+                    Assert.AreEqual(0, styles.CellStyleXfs[1].FillId);
+                    Assert.AreEqual(0, styles.CellStyleXfs[1].BorderId);
+                    Assert.AreEqual(false, styles.CellStyleXfs[1].ApplyNumberFormat);
+                    Assert.AreEqual(false, styles.CellStyleXfs[1].ApplyFill);
+                    Assert.AreEqual(false, styles.CellStyleXfs[1].ApplyBorder);
+                    Assert.AreEqual(false, styles.CellStyleXfs[1].ApplyAlignment);
+                    Assert.AreEqual(false, styles.CellStyleXfs[1].ApplyProtection);
+
+                    Assert.AreEqual(0, styles.CellXfs[0].NumberFormatId);
+                    Assert.AreEqual(0, styles.CellXfs[0].FontId);
+                    Assert.AreEqual(0, styles.CellXfs[0].FillId);
+                    Assert.AreEqual(0, styles.CellXfs[0].BorderId);
+                    Assert.IsNull(styles.CellXfs[0].ApplyNumberFormat);
+                    Assert.IsNull(styles.CellXfs[0].ApplyFill);
+                    Assert.IsNull(styles.CellXfs[0].ApplyBorder);
+                    Assert.IsNull(styles.CellXfs[0].ApplyAlignment);
+                    Assert.IsNull(styles.CellXfs[0].ApplyProtection);
+
+                    Assert.AreEqual(0, styles.CellXfs[1].NumberFormatId);
+                    Assert.AreEqual(1, styles.CellXfs[1].FontId);
+                    Assert.AreEqual(0, styles.CellXfs[1].FillId);
+                    Assert.AreEqual(0, styles.CellXfs[1].BorderId);
+                    Assert.IsNull(styles.CellXfs[1].ApplyNumberFormat);
+                    Assert.IsNull(styles.CellXfs[1].ApplyFill);
+                    Assert.IsNull(styles.CellXfs[1].ApplyBorder);
+                    Assert.IsNull(styles.CellXfs[1].ApplyAlignment);
+                    Assert.IsNull(styles.CellXfs[1].ApplyProtection);
+
+                }
+
+            }
+
+        }
+
         [TestMethod]
         public void IssueWithRoman()
         {

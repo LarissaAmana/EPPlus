@@ -93,6 +93,16 @@ internal static byte[] Issue_KeyNotFoundSaveProblem {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] Layout_Format_vorlage {
+            get {
+                object obj = ResourceManager.GetObject("Layout_Format_vorlage", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] Issue15347Test {
             get {
                 object obj = ResourceManager.GetObject("Issue15347Test", resourceCulture);

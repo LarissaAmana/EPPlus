@@ -649,6 +649,12 @@ namespace OfficeOpenXml
 
             int count = 0;
             int normalIx = NamedStyles.FindIndexByID("Normal");
+            //if "Normal" name is not found look for builtinId="0"
+            if (normalIx < 0
+                && NamedStyles.Any(s => s.BuildInId == 0))
+                normalIx = NamedStyles.FindIndexByID(
+                    NamedStyles.First(s => s.BuildInId == 0).Name);
+
             if (NamedStyles.Count > 0 && normalIx>=0 && NamedStyles[normalIx].Style.Numberformat.NumFmtID >= 164)
             {
                 ExcelNumberFormatXml nf = NumberFormats[NumberFormats.FindIndexByID(NamedStyles[normalIx].Style.Numberformat.Id)];
@@ -725,6 +731,7 @@ namespace OfficeOpenXml
             }
             (bordersNode as XmlElement).SetAttribute("count", count.ToString());
 
+            
             XmlNode styleXfsNode = _styleXml.SelectSingleNode(CellStyleXfsPath, _nameSpaceManager);
             if (styleXfsNode == null && NamedStyles.Count > 0)
             {
@@ -869,7 +876,7 @@ namespace OfficeOpenXml
                 {
                     if (xf.FontId >= 0) Fonts[xf.FontId].useCnt++;
                     if (xf.FillId >= 0) Fills[xf.FillId].useCnt++;
-                    if (xf.BorderId >= 0) Borders[xf.BorderId].useCnt++;                    
+                    if (xf.BorderId >= 0) Borders[xf.BorderId].useCnt++;
                 }
             }
         }
@@ -978,11 +985,13 @@ namespace OfficeOpenXml
                             NumberFormats.Add(format, item);
                             //rake36: Use the just added format id
                             newXfs.NumberFormatId = item.NumFmtId;
+                            newXfs.ApplyNumberFormat = true;
                         }
                         else
                         {
                             //rake36: Use the format id defined by the index... not the index itself
                             newXfs.NumberFormatId = NumberFormats[ix].NumFmtId;
+                            newXfs.ApplyNumberFormat = true;
                         }
                     }
                 }
@@ -997,6 +1006,7 @@ namespace OfficeOpenXml
                         ix = Fonts.Add(xfs.Font.Id, item);
                     }
                     newXfs.FontId = ix;
+                    newXfs.ApplyFont = true;
                 }
 
                 //Border
@@ -1009,6 +1019,7 @@ namespace OfficeOpenXml
                         ix = Borders.Add(xfs.Border.Id, item);
                     }
                     newXfs.BorderId = ix;
+                    newXfs.ApplyBorder = true;
                 }
 
                 //Fill
@@ -1021,6 +1032,7 @@ namespace OfficeOpenXml
                         ix = Fills.Add(xfs.Fill.Id, item);
                     }
                     newXfs.FillId = ix;
+                    newXfs.ApplyFill = true;
                 }
 
                 //Named style reference

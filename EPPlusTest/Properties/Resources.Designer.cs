@@ -169,5 +169,15 @@ internal static byte[] Issue_KeyNotFoundSaveProblem {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Trim {
+            get {
+                object obj = ResourceManager.GetObject("Trim", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

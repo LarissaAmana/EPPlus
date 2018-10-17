@@ -49,6 +49,14 @@ namespace EPPlusTest.Excel.Functions.Text
         }
 
         [TestMethod]
+        public void TrimShouldReturnTrimmedString()
+        {
+            var func = new Trim();
+            var result = func.Execute(FunctionsHelper.CreateArgs(" abc def "), _parsingContext);
+            Assert.AreEqual("abc def", result.Result);
+        }
+
+        [TestMethod]
         public void LeftShouldReturnSubstringFromLeft()
         {
             var func = new Left();

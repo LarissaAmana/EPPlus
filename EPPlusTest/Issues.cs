@@ -2465,7 +2465,28 @@ namespace EPPlusTest
             }
         }
 
-        
+        [TestMethod]
+        public void IssueWithTrim()
+        {
+            //Issue: Trim is not implementet
+            var excelTestFile = Resources.Trim;
+            using (MemoryStream excelStream = new MemoryStream())
+            {
+                excelStream.Write(excelTestFile, 0, excelTestFile.Length);
+
+                using (ExcelPackage exlPackage = new ExcelPackage(excelStream))
+                {
+                    var ws = exlPackage.Workbook.Worksheets[2];
+
+                    ws.Calculate();
+
+                    //Parameter
+                    Assert.AreEqual("Anlagevermögen", ws.Cells["B8"].Value);
+                    Assert.AreEqual("123 456 ABC", ws.Cells["B9"].Value);
+
+                }
+            }
+        }
 
 
 

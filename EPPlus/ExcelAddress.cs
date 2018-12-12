@@ -261,14 +261,17 @@ namespace OfficeOpenXml
         protected internal void SetAddress(string address)
         {
             address = address.Trim();
+            if (address.Contains("[]"))
+                address = address.Replace("[]", String.Empty);
+
             if (Utils.ConvertUtil._invariantCompareInfo.IsPrefix(address, "'"))
             {
                 int pos = address.IndexOf("'", 1);
                 while (pos < address.Length && address[pos + 1] == '\'')
                 {
-                    pos = address.IndexOf("'", pos+2);
+                    pos = address.IndexOf("'", pos + 2);
                 }
-                var wbws = address.Substring(1,pos-1).Replace("''","'");
+                var wbws = address.Substring(1, pos - 1).Replace("''", "'");
                 SetWbWs(wbws);
                 _address = address.Substring(pos + 2);
             }
@@ -280,7 +283,7 @@ namespace OfficeOpenXml
             {
                 _address = address;
             }
-            if(_address.IndexOfAny(new char[] {',','!', '['}) > -1)
+            if (_address.IndexOfAny(new char[] { ',', '!', '[' }) > -1)
             {
                 //Advanced address. Including Sheet or multi or table.
                 ExtractAddress(_address);
@@ -288,7 +291,7 @@ namespace OfficeOpenXml
             else
             {
                 //Simple address
-                GetRowColFromAddress(_address, out _fromRow, out _fromCol, out _toRow, out  _toCol, out _fromRowFixed, out _fromColFixed,  out _toRowFixed, out _toColFixed);
+                GetRowColFromAddress(_address, out _fromRow, out _fromCol, out _toRow, out _toCol, out _fromRowFixed, out _fromColFixed, out _toRowFixed, out _toColFixed);
                 _addresses = null;
                 _start = null;
                 _end = null;
@@ -296,6 +299,8 @@ namespace OfficeOpenXml
             _address = address;
             Validate();
         }
+
+
         internal protected virtual void ChangeAddress()
         {
         }

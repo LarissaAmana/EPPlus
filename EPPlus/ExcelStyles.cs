@@ -757,10 +757,15 @@ namespace OfficeOpenXml
             {
                 NamedStyles[normalIx].newID = 0;
                 AddNamedStyle(0, styleXfsNode, cellXfsNode, NamedStyles[normalIx]);
+                var styleXfs = CellStyleXfs[NamedStyles[normalIx].XfId];
+                styleXfs.newID = 0;
+                styleXfs.XfId = 0;
+                cellXfsNode.AppendChild(styleXfs.CreateXmlNode(_styleXml.CreateElement("xf", ExcelPackage.schemaMain)));
             }
             foreach (ExcelNamedStyleXml style in NamedStyles)
             {
-                if (!style.Name.Equals("normal", StringComparison.InvariantCultureIgnoreCase))
+                if (!style.Name.Equals("normal", StringComparison.InvariantCultureIgnoreCase)
+                    && style.BuildInId != 0) // BuildInId = 0 is Normal style
                 {
                     AddNamedStyle(count++, styleXfsNode, cellXfsNode, style);
                 }
@@ -775,6 +780,7 @@ namespace OfficeOpenXml
 
             //CellStyle
             int xfix = 0;
+            count = cellXfsNode.ChildNodes.Count;
             foreach (ExcelXfs xf in CellXfs)
             {
                 if (xf.useCnt > 0 && !(normalIx >= 0 && NamedStyles[normalIx].StyleXfId == xfix))
@@ -825,14 +831,14 @@ namespace OfficeOpenXml
             var ix = CellXfs.FindIndexByID(styleXfs.Id);
             if (ix < 0)
             {
-                cellXfsNode.AppendChild(styleXfs.CreateXmlNode(_styleXml.CreateElement("xf", ExcelPackage.schemaMain)));
+                //cellXfsNode.AppendChild(styleXfs.CreateXmlNode(_styleXml.CreateElement("xf", ExcelPackage.schemaMain)));
             }
             else
             {
                 if(id<0) CellXfs[ix].XfId = id;
                 cellXfsNode.AppendChild(CellXfs[ix].CreateXmlNode(_styleXml.CreateElement("xf", ExcelPackage.schemaMain)));
                 CellXfs[ix].useCnt = 0;
-                CellXfs[ix].newID = id;
+                CellXfs[ix].newID = cellXfsNode.ChildNodes.Count - 1;
             }
 
             if (style.XfId >= 0)

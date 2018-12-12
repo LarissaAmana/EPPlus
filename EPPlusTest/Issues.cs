@@ -2269,32 +2269,6 @@ namespace EPPlusTest
             }
         }
 
-
-
-        [TestMethod]
-        public void IssueWithExternalFormulasKnauf()
-        {
-            //Issue: If a formula contains external links the old value should be used instead of resulting in #NAME-Error
-            var excelTestFile = Resources.SN_T_1535637796_Geschäftsentwicklung_von_Knauf_Unte;
-            using (MemoryStream excelStream = new MemoryStream())
-            {
-                excelStream.Write(excelTestFile, 0, excelTestFile.Length);
-
-                using (ExcelPackage exlPackage = new ExcelPackage(excelStream))
-                {
-                    var ws = exlPackage.Workbook.Worksheets[2];
-                    ws.Calculate();
-
-                    for(int i=9; i<=148; i++)
-                    Assert.AreEqual(ws.Cells[i,3].Value, ws.Cells[(i+140),3].Value);
-                    
-
-
-
-                }
-            }
-        }
-
         [TestMethod]
         public void IssueWithRoman()
         {

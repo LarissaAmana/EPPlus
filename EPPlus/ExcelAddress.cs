@@ -837,7 +837,8 @@ namespace OfficeOpenXml
         internal static AddressType IsValid(string Address)
         {
             double d;
-            if (Address == "#REF!")
+            if (string.IsNullOrEmpty(Address)
+                || Address.Contains("#REF!"))
             {
                 return AddressType.Invalid;
             }

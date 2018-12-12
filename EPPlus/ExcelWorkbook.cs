@@ -67,13 +67,45 @@ namespace OfficeOpenXml
 		/// </summary>
 		Manual
 	}
-	#endregion
+    #endregion
 
-	/// <summary>
-	/// Represents the Excel workbook and provides access to all the 
-	/// document properties and worksheets within the workbook.
-	/// </summary>
-	public sealed class ExcelWorkbook : XmlHelper, IDisposable
+    #region UpdateExternalLinks Enumeration
+    /// <summary>
+    /// This simple type defines when the application updates links to other workbooks when the workbook is opened
+    /// </summary>
+    public enum UpdateExternalLinksMode
+    {
+        /// <summary>
+        /// Indicates that links to other workbooks are always
+        /// updated when the workbook is opened. The
+        /// application will not display an alert in the user
+        /// interface (UI). 
+        /// </summary>
+        always,
+
+        /// <summary>
+        /// Indicates that links to other workbooks are never
+        /// updated when the workbook is opened. The
+        /// application will not display an alert in the user
+        /// interface. 
+        /// </summary>
+        never,
+        /// <summary>
+        /// Indicates that the end-user specified whether they
+        /// receive an alert to update links to other workbooks
+        /// when the workbook is opened. [Example: The
+        /// application can expose this option in an application
+        /// settings dialog. end example] 
+        /// </summary>
+        userSet
+    }
+    #endregion
+
+    /// <summary>
+    /// Represents the Excel workbook and provides access to all the 
+    /// document properties and worksheets within the workbook.
+    /// </summary>
+    public sealed class ExcelWorkbook : XmlHelper, IDisposable
 	{
 		internal class SharedStringItem
 		{
@@ -568,7 +600,46 @@ namespace OfficeOpenXml
                 SetXmlNodeBool(date1904Path, value, false);
             }
         }
-     
+
+        const string saveExternalLinkValuesPath = "d:workbookPr/@saveExternalLinkValues";
+        /// <summary>
+        /// Specifies whether the application will cache values retrieved from other workbooks via an externally linking formula. Data is cached at save.
+        /// </summary>
+        public bool SaveExternalLinkValues
+        {
+            get
+            {
+            return GetXmlNodeBool(saveExternalLinkValuesPath, true);
+            }
+            set
+            {
+            SetXmlNodeBool(saveExternalLinkValuesPath, value, true);
+            }
+        }
+    
+        const string updateLinksPath = "d:workbookPr/@updateLinks";
+        /// <summary>
+        /// Specifies how the application updates external links when the workbook is opened
+        /// </summary>
+        public UpdateExternalLinksMode UpdateExternalExternalLinks
+        {
+            get
+            {
+                string updateLinksMode = GetXmlNodeString(updateLinksPath);
+    
+                switch (updateLinksMode)
+                {
+                    case "always":
+                        return UpdateExternalLinksMode.always;
+                    case "never":
+                        return UpdateExternalLinksMode.never;
+                    default:
+                        return UpdateExternalLinksMode.userSet;
+                }
+            }
+            set { SetXmlNodeString(updateLinksPath, value.ToString()); }
+        }
+
        
 		/// <summary>
 		/// Create or read the XML for the workbook.

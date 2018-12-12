@@ -183,24 +183,27 @@ namespace OfficeOpenXml
 					ExcelRangeBase range;
 					ExcelNamedRange namedRange;
 
-					if (fullAddress.IndexOf("[") == 0)
-					{
-						int start = fullAddress.IndexOf("[");
-						int end = fullAddress.IndexOf("]", start);
-						if (start >= 0 && end >= 0)
-						{
+                    //featurecommented out due to Bug - Issue 15399
 
-							string externalIndex = fullAddress.Substring(start + 1, end - start - 1);
-							int index;
-							if (int.TryParse(externalIndex, out index))
-							{
-								if (index > 0 && index <= _externalReferences.Count)
-								{
-									fullAddress = fullAddress.Substring(0, start) + "[" + _externalReferences[index - 1] + "]" + fullAddress.Substring(end + 1);
-								}
-							}
-						}
-					}
+
+					//if (fullAddress.IndexOf("[") == 0)
+					//{
+					//	int start = fullAddress.IndexOf("[");
+					//	int end = fullAddress.IndexOf("]", start);
+					//	if (start >= 0 && end >= 0)
+					//	{
+
+					//		string externalIndex = fullAddress.Substring(start + 1, end - start - 1);
+					//		int index;
+					//		if (int.TryParse(externalIndex, out index))
+					//		{
+					//			if (index > 0 && index <= _externalReferences.Count)
+					//			{
+					//				fullAddress = fullAddress.Substring(0, start) + "[" + _externalReferences[index - 1] + "]" + fullAddress.Substring(end + 1);
+					//			}
+					//		}
+					//	}
+					//}
 
 					if (addressType == ExcelAddressBase.AddressType.Invalid || addressType == ExcelAddressBase.AddressType.InternalName || addressType == ExcelAddressBase.AddressType.ExternalName || addressType==ExcelAddressBase.AddressType.Formula || addressType==ExcelAddressBase.AddressType.ExternalAddress)    //A value or a formula
 					{

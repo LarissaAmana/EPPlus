@@ -41,11 +41,13 @@ namespace EPPlusTest
             {
                 Directory.CreateDirectory(@"c:\Temp");
             }
+
             if (!Directory.Exists(@"c:\Temp\bug"))
             {
                 Directory.CreateDirectory(@"c:\Temp\bug");
             }
         }
+
         [TestMethod, Ignore]
         public void Issue15052()
         {
@@ -55,13 +57,14 @@ namespace EPPlusTest
             ws.Cells["B1:B4"].Value = 2;
 
             ws.Cells[1, 1, 4, 1]
-                        .Style.Numberformat.Format = "#,##0.00;[Red]-#,##0.00";
+                .Style.Numberformat.Format = "#,##0.00;[Red]-#,##0.00";
 
             ws.Cells[1, 2, 5, 2]
-                                    .Style.Numberformat.Format = "#,##0;[Red]-#,##0";
+                .Style.Numberformat.Format = "#,##0;[Red]-#,##0";
 
             p.SaveAs(new FileInfo(@"c:\temp\style.xlsx"));
         }
+
         [TestMethod]
         public void Issue15041()
         {
@@ -74,6 +77,7 @@ namespace EPPlusTest
                 ws.Dispose();
             }
         }
+
         [TestMethod]
         public void Issue15031()
         {
@@ -86,6 +90,7 @@ namespace EPPlusTest
                 ws.Dispose();
             }
         }
+
         [TestMethod]
         public void Issue15022()
         {
@@ -97,6 +102,7 @@ namespace EPPlusTest
                 ws.Cells.AutoFitColumns();
             }
         }
+
         [TestMethod]
         public void Issue15056()
         {
@@ -111,6 +117,7 @@ namespace EPPlusTest
             }
 
         }
+
         [Ignore]
         [TestMethod]
         public void Issue15058()
@@ -119,6 +126,7 @@ namespace EPPlusTest
             ExcelPackage excelP = new ExcelPackage(newFile);
             ExcelWorksheet ws = excelP.Workbook.Worksheets[1];
         }
+
         [Ignore]
         [TestMethod]
         public void Issue15063()
@@ -128,6 +136,7 @@ namespace EPPlusTest
             ExcelWorksheet ws = excelP.Workbook.Worksheets[1];
             ws.Calculate();
         }
+
         [Ignore]
         [TestMethod]
         public void Issue15112()
@@ -149,7 +158,8 @@ namespace EPPlusTest
         [TestMethod]
         public void Issue15118()
         {
-            using (var package = new OfficeOpenXml.ExcelPackage(new FileInfo(@"c:\temp\bugOutput.xlsx"), new FileInfo(@"c:\temp\bug\DeleteRowIssue\Template.xlsx")))
+            using (var package = new OfficeOpenXml.ExcelPackage(new FileInfo(@"c:\temp\bugOutput.xlsx"),
+                new FileInfo(@"c:\temp\bug\DeleteRowIssue\Template.xlsx")))
             {
                 ExcelWorkbook workBook = package.Workbook;
                 var worksheet = workBook.Worksheets[1];
@@ -165,6 +175,7 @@ namespace EPPlusTest
                 package.Save();
             }
         }
+
         [Ignore]
         [TestMethod]
         public void Issue15109()
@@ -187,6 +198,7 @@ namespace EPPlusTest
             Assert.AreEqual("A1:AD406", ws.Dimension.Address);
             excelP.Dispose();
         }
+
         [Ignore]
         [TestMethod]
         public void Issue15120()
@@ -198,6 +210,7 @@ namespace EPPlusTest
 
             //p.Save();
         }
+
         [TestMethod]
         public void Issue15113()
         {
@@ -211,6 +224,7 @@ namespace EPPlusTest
             ws.Cells["A1:H1"].Style.Font.Bold = true;
             p.SaveAs(new FileInfo(@"c:\temp\merge.xlsx"));
         }
+
         [TestMethod]
         public void Issue15141()
         {
@@ -224,6 +238,7 @@ namespace EPPlusTest
                 ExcelColumn column = sheet.Column(3); // fails with exception
             }
         }
+
         [TestMethod, Ignore]
         public void Issue15145()
         {
@@ -237,6 +252,7 @@ namespace EPPlusTest
                 p.SaveAs(new System.IO.FileInfo(@"C:\Temp\bug\InsertCopyFail.xlsx"));
             }
         }
+
         [TestMethod, Ignore]
         public void Issue15150()
         {
@@ -277,6 +293,7 @@ namespace EPPlusTest
             var dest = ws.Cells[1, column + columns, ws.Dimension.End.Row, ws.Dimension.End.Column + columns];
             source.Copy(dest);
         }
+
         [TestMethod]
         public void Issue15123()
         {
@@ -339,11 +356,13 @@ namespace EPPlusTest
             ws.Cells["A1:A8"].Merge = false;
             p.Dispose();
         }
+
         [Ignore]
         [TestMethod]
         public void Issue15158()
         {
-            using (var package = new OfficeOpenXml.ExcelPackage(new FileInfo(@"c:\temp\Output.xlsx"), new FileInfo(@"C:\temp\bug\DeleteColFormula\FormulasIssue\demo.xlsx")))
+            using (var package = new OfficeOpenXml.ExcelPackage(new FileInfo(@"c:\temp\Output.xlsx"),
+                new FileInfo(@"C:\temp\bug\DeleteColFormula\FormulasIssue\demo.xlsx")))
             {
                 ExcelWorkbook workBook = package.Workbook;
                 ExcelWorksheet worksheet = workBook.Worksheets[1];
@@ -369,19 +388,20 @@ namespace EPPlusTest
         {
             public string prop2 { get; set; }
         }
+
         [TestMethod]
         public void LoadFromColIssue()
         {
             var l = new List<cls1>();
 
-            var c2 = new cls2() { prop1 = 1, prop2 = "test1" };
+            var c2 = new cls2() {prop1 = 1, prop2 = "test1"};
             l.Add(c2);
 
             var p = new ExcelPackage();
             var ws = p.Workbook.Worksheets.Add("Test");
 
             ws.Cells["A1"].LoadFromCollection(l, true, TableStyles.Light16, BindingFlags.Instance | BindingFlags.Public,
-                new MemberInfo[] { typeof(cls2).GetProperty("prop2") });
+                new MemberInfo[] {typeof(cls2).GetProperty("prop2")});
         }
 
         [TestMethod]
@@ -397,6 +417,7 @@ namespace EPPlusTest
                 Assert.AreEqual("A1", ws.Cells[1, 1].Value);
             }
         }
+
         [Ignore]
         [TestMethod]
         public void Issue15159()
@@ -406,9 +427,11 @@ namespace EPPlusTest
             {
                 package.Save();
             }
+
             fs.Seek(0, SeekOrigin.Begin);
             var fs2 = fs;
         }
+
         [TestMethod]
         public void Issue15179()
         {
@@ -423,6 +446,7 @@ namespace EPPlusTest
 
             }
         }
+
         [Ignore]
         [TestMethod]
         public void Issue15169()
@@ -441,6 +465,7 @@ namespace EPPlusTest
                 excelPackage.SaveAs(new FileInfo(@"C:\temp\bug\issue\output2.xlsx"));
             }
         }
+
         [Ignore]
         [TestMethod]
         public void Issue15172()
@@ -456,6 +481,7 @@ namespace EPPlusTest
                 Assert.AreEqual(0D, ws.Cells["X10"].Value);
             }
         }
+
         [Ignore]
         [TestMethod]
         public void Issue15174()
@@ -467,6 +493,7 @@ namespace EPPlusTest
                 package.SaveAs(new FileInfo(@"C:\temp\bug\MyTemplate2.xlsx"));
             }
         }
+
         [Ignore]
         [TestMethod]
         public void PictureIssue()
@@ -511,7 +538,7 @@ namespace EPPlusTest
                 Assert.AreEqual("20L2300", ws.Cells["F4"].Value);
                 Assert.AreEqual("20K2E01", ws.Cells["F5"].Value);
                 var f7Val = pck.Workbook.Worksheets["MODELLO-TIPO PANNELLO"].Cells["F7"].Value;
-                Assert.AreEqual(13.445419, Math.Round((double)f7Val, 6));
+                Assert.AreEqual(13.445419, Math.Round((double) f7Val, 6));
                 sw.Stop();
                 Console.WriteLine(sw.Elapsed.TotalSeconds); // approx. 10 seconds
 
@@ -524,7 +551,8 @@ namespace EPPlusTest
             using (var pck = new ExcelPackage(new FileInfo(@"c:\temp\EPPlusIssues\Excel02.xlsx")))
             {
                 var sw = new Stopwatch();
-                pck.Workbook.FormulaParser.Configure(x => x.AttachLogger(LoggerFactory.CreateTextFileLogger(new FileInfo(@"c:\Temp\log1.txt"))));
+                pck.Workbook.FormulaParser.Configure(x =>
+                    x.AttachLogger(LoggerFactory.CreateTextFileLogger(new FileInfo(@"c:\Temp\log1.txt"))));
                 sw.Start();
                 var ws = pck.Workbook.Worksheets.First();
                 //ws.Calculate();
@@ -536,6 +564,7 @@ namespace EPPlusTest
 
             }
         }
+
         [Ignore]
         [TestMethod]
         public void Issue15154()
@@ -547,12 +576,15 @@ namespace EPPlusTest
                 using (var package = new ExcelPackage(new FileStream(file, FileMode.Open)))
                 {
                     package.Workbook.Worksheets[1].Cells[1, 1].Value = file;
-                    package.SaveAs(new FileInfo(@"c:\temp\bug\ConstructorInvokationNotThreadSafe\new\" + new FileInfo(file).Name));
+                    package.SaveAs(new FileInfo(@"c:\temp\bug\ConstructorInvokationNotThreadSafe\new\" +
+                                                new FileInfo(file).Name));
                 }
+
                 //}
             });
 
         }
+
         [Ignore]
         [TestMethod]
         public void Issue15188()
@@ -570,10 +602,12 @@ namespace EPPlusTest
                 Assert.AreEqual(DateTime.Today.ToString("MM/dd/yyyy"), a);
             }
         }
+
         [TestMethod, Ignore]
         public void Issue15194()
         {
-            using (var package = new OfficeOpenXml.ExcelPackage(new FileInfo(@"c:\temp\bug\i15194-Save.xlsx"), new FileInfo(@"c:\temp\bug\I15194.xlsx")))
+            using (var package = new OfficeOpenXml.ExcelPackage(new FileInfo(@"c:\temp\bug\i15194-Save.xlsx"),
+                new FileInfo(@"c:\temp\bug\I15194.xlsx")))
             {
                 ExcelWorkbook workBook = package.Workbook;
                 var worksheet = workBook.Worksheets[1];
@@ -585,10 +619,12 @@ namespace EPPlusTest
                 package.Save();
             }
         }
+
         [TestMethod, Ignore]
         public void Issue15195()
         {
-            using (var package = new OfficeOpenXml.ExcelPackage(new FileInfo(@"c:\temp\bug\i15195_Save.xlsx"), new FileInfo(@"c:\temp\bug\i15195.xlsx")))
+            using (var package = new OfficeOpenXml.ExcelPackage(new FileInfo(@"c:\temp\bug\i15195_Save.xlsx"),
+                new FileInfo(@"c:\temp\bug\i15195.xlsx")))
             {
                 ExcelWorkbook workBook = package.Workbook;
                 var worksheet = workBook.Worksheets[1];
@@ -598,10 +634,12 @@ namespace EPPlusTest
                 package.Save();
             }
         }
+
         [TestMethod, Ignore]
         public void Issue14788()
         {
-            using (var package = new OfficeOpenXml.ExcelPackage(new FileInfo(@"c:\temp\bug\i15195_Save.xlsx"), new FileInfo(@"c:\temp\bug\GetWorkSheetXmlBad.xlsx")))
+            using (var package = new OfficeOpenXml.ExcelPackage(new FileInfo(@"c:\temp\bug\i15195_Save.xlsx"),
+                new FileInfo(@"c:\temp\bug\GetWorkSheetXmlBad.xlsx")))
             {
                 ExcelWorkbook workBook = package.Workbook;
                 var worksheet = workBook.Worksheets[1];
@@ -611,6 +649,7 @@ namespace EPPlusTest
                 package.Save();
             }
         }
+
         [TestMethod, Ignore]
         public void Issue15167()
         {
@@ -628,10 +667,12 @@ namespace EPPlusTest
                 excelPackage.SaveAs(new FileInfo(@"c:\temp\bug\output.xlsx"));
             }
         }
+
         [TestMethod, Ignore]
         public void Issue15198()
         {
-            using (var package = new OfficeOpenXml.ExcelPackage(new FileInfo(@"c:\temp\bug\Output.xlsx"), new FileInfo(@"c:\temp\bug\demo.xlsx")))
+            using (var package = new OfficeOpenXml.ExcelPackage(new FileInfo(@"c:\temp\bug\Output.xlsx"),
+                new FileInfo(@"c:\temp\bug\demo.xlsx")))
             {
                 ExcelWorkbook workBook = package.Workbook;
                 var worksheet = workBook.Worksheets[1];
@@ -641,6 +682,7 @@ namespace EPPlusTest
                 package.Save();
             }
         }
+
         [TestMethod, Ignore]
         public void Issue13492()
         {
@@ -654,18 +696,22 @@ namespace EPPlusTest
                 package.Save();
             }
         }
+
         [TestMethod, Ignore]
         public void Issue14966()
         {
             using (var package = new ExcelPackage(new FileInfo(@"c:\temp\bug\ssis\FileFromReportingServer2012.xlsx")))
                 package.SaveAs(new FileInfo(@"c:\temp\bug\ssis\Corrupted.xlsx"));
         }
+
         [TestMethod, Ignore]
         public void Issue15200()
         {
-            File.Copy(@"C:\temp\bug\EPPlusRangeCopyTest\EPPlusRangeCopyTest\input.xlsx", @"C:\temp\bug\EPPlusRangeCopyTest\EPPlusRangeCopyTest\output.xlsx", true);
+            File.Copy(@"C:\temp\bug\EPPlusRangeCopyTest\EPPlusRangeCopyTest\input.xlsx",
+                @"C:\temp\bug\EPPlusRangeCopyTest\EPPlusRangeCopyTest\output.xlsx", true);
 
-            using (var p = new ExcelPackage(new FileInfo(@"C:\temp\bug\EPPlusRangeCopyTest\EPPlusRangeCopyTest\output.xlsx")))
+            using (var p =
+                new ExcelPackage(new FileInfo(@"C:\temp\bug\EPPlusRangeCopyTest\EPPlusRangeCopyTest\output.xlsx")))
             {
                 var sheet = p.Workbook.Worksheets.First();
 
@@ -675,15 +721,18 @@ namespace EPPlusTest
 
                 sourceRange = sheet.Cells[1, 1, 1, 7];
                 resultRange = sheet.Cells[5, 1, 5, 7];
-                sourceRange.Copy(resultRange);  // This throws System.ArgumentException: Can't merge and already merged range
+                sourceRange.Copy(
+                    resultRange); // This throws System.ArgumentException: Can't merge and already merged range
 
                 sourceRange = sheet.Cells[1, 1, 1, 7];
                 resultRange = sheet.Cells[7, 3, 7, 7];
-                sourceRange.Copy(resultRange);  // This throws System.ArgumentException: Can't merge and already merged range
+                sourceRange.Copy(
+                    resultRange); // This throws System.ArgumentException: Can't merge and already merged range
 
                 p.Save();
             }
         }
+
         [TestMethod]
         public void Issue15212()
         {
@@ -707,7 +756,7 @@ namespace EPPlusTest
                 using (ExcelPackage package = new ExcelPackage(file))
 
                 {
-                    
+
                     package.SaveAs(new FileInfo(@"Pleas insert a path"));
                 }
             }
@@ -723,10 +772,12 @@ namespace EPPlusTest
                     ws.Cells[1023, 1, ws.Dimension.End.Row - 2, ws.Dimension.End.Column].Clear();
                     Assert.AreNotEqual(ws.Dimension, null);
                 }
+
                 foreach (var cell in p.Workbook.Worksheets[2].Cells)
                 {
                     Console.WriteLine(cell);
                 }
+
                 p.SaveAs(new FileInfo(@"c:\temp\bug\ExcelClearDemo\exceltestfile-save.xlsx"));
             }
         }
@@ -746,6 +797,7 @@ namespace EPPlusTest
                 p.Save();
             }
         }
+
         [TestMethod, Ignore]
         public void Issuer15228()
         {
@@ -779,6 +831,7 @@ namespace EPPlusTest
                 p.Save();
             }
         }
+
         [TestMethod]
         /**** Pivottable issue ****/
         public void Issue()
@@ -794,7 +847,7 @@ namespace EPPlusTest
         {
             if (MyFile.Exists)
             {
-                MyFile.Delete();  // ensures we create a new workbook
+                MyFile.Delete(); // ensures we create a new workbook
             }
 
             using (ExcelPackage EP = new ExcelPackage(MyFile))
@@ -861,6 +914,7 @@ namespace EPPlusTest
                 EP.Save();
             }
         }
+
         private void BuildPivotTable1(FileInfo MyFile)
         {
             using (ExcelPackage ep = new ExcelPackage(MyFile))
@@ -948,6 +1002,7 @@ namespace EPPlusTest
                 exfile.SaveAs(new FileInfo(@"c:\temp\bug\Boldtextcopy2.xlsx"));
             }
         }
+
         [TestMethod, Ignore]
         public void issue15300()
         {
@@ -958,6 +1013,7 @@ namespace EPPlusTest
             }
 
         }
+
         [TestMethod, Ignore]
         public void issue15295()
         {
@@ -967,6 +1023,7 @@ namespace EPPlusTest
             }
 
         }
+
         [TestMethod, Ignore]
         public void issue15282()
         {
@@ -980,7 +1037,8 @@ namespace EPPlusTest
         [TestMethod, Ignore]
         public void Issues14699()
         {
-            FileInfo newFile = new FileInfo(string.Format("c:\\temp\\bug\\EPPlus_Issue14699.xlsx", System.IO.Directory.GetCurrentDirectory()));
+            FileInfo newFile = new FileInfo(string.Format("c:\\temp\\bug\\EPPlus_Issue14699.xlsx",
+                System.IO.Directory.GetCurrentDirectory()));
             OfficeOpenXml.ExcelPackage pkg = new ExcelPackage(newFile);
             ExcelWorksheet wksheet = pkg.Workbook.Worksheets.Add("Issue14699");
             // Initialize a small range
@@ -991,10 +1049,12 @@ namespace EPPlusTest
                     wksheet.Cells[row, col].Value = string.Format("{0}{1}", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[col - 1], row);
                 }
             }
+
             wksheet.View.FreezePanes(3, 3);
             pkg.Save();
 
         }
+
         [TestMethod, Ignore]
         public void Issue15382()
         {
@@ -1003,6 +1063,7 @@ namespace EPPlusTest
                 exfile.SaveAs(new FileInfo(@"C:\temp\bug\inlinText.xlsx"));
             }
         }
+
         [TestMethod, Ignore]
         public void Issue15380()
         {
@@ -1012,6 +1073,7 @@ namespace EPPlusTest
                 Assert.AreEqual(v, 1);
             }
         }
+
         [TestMethod, Ignore]
         public void Issue15378()
         {
@@ -1021,16 +1083,18 @@ namespace EPPlusTest
                 var cs = c.Series[0] as ExcelBubbleChartSerie;
             }
         }
+
         [TestMethod]
         public void Issue15377()
         {
             using (var p = new ExcelPackage())
             {
                 var ws = p.Workbook.Worksheets.Add("ws1");
-                ws.Cells["A1"].Value = (double?)1;
+                ws.Cells["A1"].Value = (double?) 1;
                 var v = ws.GetValue<double?>(1, 1);
             }
         }
+
         [TestMethod]
         public void Issue15374()
         {
@@ -1043,6 +1107,7 @@ namespace EPPlusTest
                 p.SaveAs(new FileInfo(@"c:\temp\rt.xlsx"));
             }
         }
+
         [TestMethod]
         public void IssueTranslate()
         {
@@ -1055,6 +1120,7 @@ namespace EPPlusTest
                 Assert.AreEqual("IF(1=1,\"A's B C\",\"D\")", ws.Cells["A2"].Formula);
             }
         }
+
         [TestMethod]
         public void Issue15397()
         {
@@ -1083,6 +1149,7 @@ namespace EPPlusTest
                 p.SaveAs(new FileInfo(@"c:\temp\styleerror.xlsx"));
             }
         }
+
         [TestMethod]
         public void Issuer14801()
         {
@@ -1099,6 +1166,7 @@ namespace EPPlusTest
                 p.SaveAs(new FileInfo(@"c:\temp\rtpreserve.xlsx"));
             }
         }
+
         [TestMethod]
         public void Issuer15445()
         {
@@ -1111,6 +1179,7 @@ namespace EPPlusTest
                 p.SaveAs(new FileInfo(@"c:\temp\activeCell.xlsx"));
             }
         }
+
         [TestMethod, Ignore]
         public void Issue15429()
         {
@@ -1124,6 +1193,7 @@ namespace EPPlusTest
                 worksheet.ConditionalFormatting.AddDatabar(new ExcelAddress(4, 4, 4, 4), Color.Red);
                 excelPackage.Save();
             }
+
             using (ExcelPackage excelPackage = new ExcelPackage(file))
             {
                 var worksheet = excelPackage.Workbook.Worksheets["Sheet 1"];
@@ -1132,9 +1202,11 @@ namespace EPPlusTest
                 {
                     conditionalFormat.Address = new ExcelAddress(5 + i++, 5, 6, 6);
                 }
+
                 excelPackage.SaveAs(new FileInfo(@"c:\temp\error.xlsx"));
             }
         }
+
         [TestMethod, Ignore]
         public void Issue15436()
         {
@@ -1144,15 +1216,18 @@ namespace EPPlusTest
                 Assert.AreEqual(excelPackage.Workbook.Worksheets[1].Cells["A1"].Value, 19120072);
             }
         }
+
         [TestMethod, Ignore]
         public void Issue13128()
         {
             FileInfo file = new FileInfo(@"c:\temp\students.xlsx");
             using (ExcelPackage excelPackage = new ExcelPackage(file))
             {
-                Assert.AreNotEqual(((ExcelChart)excelPackage.Workbook.Worksheets[1].Drawings[0]).Series[0].XSeries, null);
+                Assert.AreNotEqual(((ExcelChart) excelPackage.Workbook.Worksheets[1].Drawings[0]).Series[0].XSeries,
+                    null);
             }
         }
+
         [TestMethod, Ignore]
         public void Issue15252()
         {
@@ -1178,6 +1253,7 @@ namespace EPPlusTest
                 }
             }
         }
+
         [TestMethod, Ignore]
         public void Issue15469()
         {
@@ -1187,6 +1263,7 @@ namespace EPPlusTest
                 excelPackage.SaveAs(fs);
             }
         }
+
         [TestMethod]
         public void Issue15438()
         {
@@ -1198,6 +1275,7 @@ namespace EPPlusTest
                 Assert.AreEqual(c.LookupColor(c), "#FF00FF00");
             }
         }
+
         [TestMethod, Ignore]
         public void Issue15097()
         {
@@ -1213,6 +1291,7 @@ namespace EPPlusTest
                 }
             }
         }
+
         [TestMethod]
         public void Issue15485()
         {
@@ -1224,12 +1303,14 @@ namespace EPPlusTest
                 pkg.Save();
             }
         }
+
         public static byte[] ReadTemplateFile(string templateName)
         {
             byte[] templateFIle;
             using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
             {
-                using (var sw = new System.IO.FileStream(templateName, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.ReadWrite))
+                using (var sw = new System.IO.FileStream(templateName, System.IO.FileMode.Open,
+                    System.IO.FileAccess.Read, System.IO.FileShare.ReadWrite))
                 {
                     byte[] buffer = new byte[2048];
                     int bytesRead;
@@ -1238,9 +1319,11 @@ namespace EPPlusTest
                         ms.Write(buffer, 0, bytesRead);
                     }
                 }
+
                 ms.Position = 0;
                 templateFIle = ms.ToArray();
             }
+
             return templateFIle;
 
         }
@@ -1276,9 +1359,10 @@ namespace EPPlusTest
                 using (ExcelPackage package = new ExcelPackage(file))
                 {
                     var sheet = package.Workbook.Worksheets.Add("New Sheet");
-                    sheet.Cells[3, 3].Value = new[] { "value1", "value2", "value3" };
+                    sheet.Cells[3, 3].Value = new[] {"value1", "value2", "value3"};
                     package.Save();
                 }
+
                 using (ExcelPackage package = new ExcelPackage(file))
                 {
                     var sheet = package.Workbook.Worksheets["New Sheet"];
@@ -1303,9 +1387,10 @@ namespace EPPlusTest
                 using (ExcelPackage package = new ExcelPackage(file))
                 {
                     var sheet = package.Workbook.Worksheets.Add("New Sheet");
-                    sheet.Cells[3, 3].Value = new[] { null, "value2", "value3" };
+                    sheet.Cells[3, 3].Value = new[] {null, "value2", "value3"};
                     package.Save();
                 }
+
                 using (ExcelPackage package = new ExcelPackage(file))
                 {
                     var sheet = package.Workbook.Worksheets["New Sheet"];
@@ -1330,13 +1415,14 @@ namespace EPPlusTest
                 using (ExcelPackage package = new ExcelPackage(file))
                 {
                     var sheet = package.Workbook.Worksheets.Add("New Sheet");
-                    sheet.Cells[3, 3].Value = new[] { 5, 6, 7 };
+                    sheet.Cells[3, 3].Value = new[] {5, 6, 7};
                     package.Save();
                 }
+
                 using (ExcelPackage package = new ExcelPackage(file))
                 {
                     var sheet = package.Workbook.Worksheets["New Sheet"];
-                    Assert.AreEqual((double)5, sheet.Cells[3, 3].Value);
+                    Assert.AreEqual((double) 5, sheet.Cells[3, 3].Value);
                 }
             }
             finally
@@ -1345,6 +1431,7 @@ namespace EPPlusTest
                     file.Delete();
             }
         }
+
         [TestMethod]
         public void MergeIssue()
         {
@@ -1360,263 +1447,12 @@ namespace EPPlusTest
             }
         }
 
-        [TestMethod]
-
-        public void Issue15347()
-        {
-            using (var file = new MemoryStream())
-            {
-                file.Write(EPPlusTest.Properties.Resources.Issue15347Test, 0,
-                    EPPlusTest.Properties.Resources.Issue15347Test.Length);
-                using (ExcelPackage package = new ExcelPackage(file))
-                {
-
-                    var sheet = package.Workbook.Worksheets[1];
-
-                    ExcelRange range = sheet.Cells[1, 1];
-                    package.Save();
-                }
-
-                using (ExcelPackage package = new ExcelPackage(file))
-                {
-                    var sheet = package.Workbook.Worksheets["Tabelle1"];
-                    ExcelRange range = sheet.Cells[1, 1];
-                    Assert.IsTrue(range.Value is string);
-                }
-            }
-        }
-
-
-        [TestMethod]
-        public void Issue15353_QuotsInNamedRanges()
-        {
-            var package = new ExcelPackage();
-            var sheet = package.Workbook.Worksheets.Add("My 'Sheet");
-            var namedRange1 = package.Workbook.Names.Add("name1", new ExcelRangeBase(sheet, "$B$1"));
-
-            Assert.AreEqual(namedRange1.FullAddressAbsolute, "'My ''Sheet'!$B$1");
-
-
-            //"My "Sheet"            //'My "Sheet'!$A$1
-
-        }
-
-        [TestMethod]
-        public void Issue15353_QuotsInFormulae()
-        {
-            //positive Example 1:
-            TokenizerContext formulaContext1 = new TokenizerContext("= part1 & \" is \'\" & yearshort");
-
-            formulaContext1.ToggleIsInSheetName();
-
-            TokenHandler handlerSheetName1 =
-                new TokenHandler(formulaContext1, _tokenFactory, new TokenSeparatorProvider());
-            handlerSheetName1.Worksheet = "My 'Sheet";
-
-            while (handlerSheetName1.HasMore())
-            {
-                handlerSheetName1.Next();
-            }
-            var _syntAnalyzer = new SyntacticAnalyzer();
-
-            try
-            {
-                _syntAnalyzer.Analyze(formulaContext1.Result);
-
-            }
-            catch
-            {
-                Assert.IsTrue(false, "Syntactic analyzer throws exception on a valid string");
-            }
-
-
-            //positive Example 2:
-
-            TokenizerContext formulaContext2 = new TokenizerContext("= part1 & \" is \"\"some\"\" \" & yearshort");
-
-            formulaContext2.ToggleIsInSheetName();
-
-            TokenHandler handlerSheetName2 =
-                new TokenHandler(formulaContext2, _tokenFactory, new TokenSeparatorProvider());
-            handlerSheetName2.Worksheet = "My 'Sheet";
-
-            while (handlerSheetName2.HasMore())
-            {
-                handlerSheetName2.Next();
-            }
-            var _syntAnalyzer2 = new SyntacticAnalyzer();
-
-            try
-            {
-                _syntAnalyzer2.Analyze(formulaContext2.Result);
-
-            }
-            catch
-            {
-                Assert.IsTrue(false, "Syntactic analyzer throws exception on a valid string");
-            }
-
-
-            //positive Example 3:
-
-            TokenizerContext formulaContext3 = new TokenizerContext("= part1 & \" is some \"\"\" & yearshort");
-
-            formulaContext3.ToggleIsInSheetName();
-
-            TokenHandler handlerSheetName3 =
-                new TokenHandler(formulaContext3, _tokenFactory, new TokenSeparatorProvider());
-            handlerSheetName3.Worksheet = "My 'Sheet";
-
-            while (handlerSheetName3.HasMore())
-            {
-                handlerSheetName3.Next();
-            }
-            var _syntAnalyzer3 = new SyntacticAnalyzer();
-
-            try
-            {
-                _syntAnalyzer3.Analyze(formulaContext3.Result);
-            }
-            catch
-            {
-                Assert.IsTrue(false, "Syntactic analyzer throws exception on a valid string");
-            }
-
-
-            //positive Example 4:
-
-            TokenizerContext formulaContext4 = new TokenizerContext("= part1 & \"\' is some\'\" & yearshort");
-
-            formulaContext4.ToggleIsInSheetName();
-
-            TokenHandler handlerSheetName4 =
-                new TokenHandler(formulaContext4, _tokenFactory, new TokenSeparatorProvider());
-            handlerSheetName4.Worksheet = "My 'Sheet";
-
-            while (handlerSheetName4.HasMore())
-            {
-                handlerSheetName4.Next();
-            }
-            var _syntAnalyzer4 = new SyntacticAnalyzer();
-
-            try
-            {
-                _syntAnalyzer4.Analyze(formulaContext4.Result);
-
-            }
-            catch
-            {
-                Assert.IsTrue(false, "Syntactic analyzer throws exception on a valid string");
-            }
-
-
-            //positive Example 5:
-
-            TokenizerContext formulaContext5 = new TokenizerContext("= part1 & \" is some\'\'\" & yearshort");
-
-            formulaContext5.ToggleIsInSheetName();
-
-            TokenHandler handlerSheetName5 =
-                new TokenHandler(formulaContext5, _tokenFactory, new TokenSeparatorProvider());
-            handlerSheetName5.Worksheet = "My 'Sheet";
-
-            while (handlerSheetName5.HasMore())
-            {
-                handlerSheetName5.Next();
-            }
-            var _syntAnalyzer5 = new SyntacticAnalyzer();
-
-            try
-            {
-                _syntAnalyzer5.Analyze(formulaContext5.Result);
-            }
-            catch
-            {
-                Assert.IsTrue(false, "Syntactic analyzer throws exception on a valid string");
-            }
-
-
-            //negative Example 1:
-
-            TokenizerContext formulaContext6 = new TokenizerContext("= part1 & \" is \"\"some\" \" & yearshort");
-
-
-            formulaContext6.ToggleIsInSheetName();
-
-            TokenHandler handlerSheetName6 =
-                new TokenHandler(formulaContext6, _tokenFactory, new TokenSeparatorProvider());
-            handlerSheetName6.Worksheet = "My 'Sheet";
-
-            while (handlerSheetName6.HasMore())
-            {
-                handlerSheetName6.Next();
-            }
-            var _syntAnalyzer6 = new SyntacticAnalyzer();
-
-            try
-            {
-                _syntAnalyzer6.Analyze(formulaContext6.Result);
-                Assert.Fail("Syntactic analyzer has to throw an exception on an invalid string");
-            }
-            catch
-            {
-
-            }
-
-
-            //negative Example 2: 
-
-            TokenizerContext formulaContext7 = new TokenizerContext("= part1 & \" is some \"\" & yearshort");
-
-            formulaContext7.ToggleIsInSheetName();
-
-            TokenHandler handlerSheetName7 =
-                new TokenHandler(formulaContext7, _tokenFactory, new TokenSeparatorProvider());
-            handlerSheetName7.Worksheet = "My 'Sheet";
-
-            while (handlerSheetName7.HasMore())
-            {
-                handlerSheetName7.Next();
-            }
-            var _syntAnalyzer7 = new SyntacticAnalyzer();
-
-            try
-            {
-                _syntAnalyzer7.Analyze(formulaContext7.Result);
-                Assert.Fail("Syntactic analyzer has to throw an exception on an invalid string");
-            }
-            catch
-
-            {
-
-
-                //negative Example 3:
-
-                TokenizerContext formulaContext8 = new TokenizerContext("= part1 & \"\' is some\' & yearshort");
-
-                //negative
-                //= part1 & " is some'' & yearshort
-
-
-                formulaContext8.ToggleIsInSheetName();
-
-                TokenHandler handlerSheetName8 =
-                    new TokenHandler(formulaContext8, _tokenFactory, new TokenSeparatorProvider());
-                handlerSheetName8.Worksheet = "My 'Sheet";
-
-                while (handlerSheetName8.HasMore())
-
-                    handlerSheetName8.Next();
-
-                var _syntAnalyzer8 = new SyntacticAnalyzer();
-            }
-        }
 
 
         [TestMethod]
         public void Issue15221()
         {
-            
+
             using (var package = new ExcelPackage())
             {
                 var sheet = package.Workbook.Worksheets.Add("sheet1");
@@ -1633,7 +1469,8 @@ namespace EPPlusTest
         {
 
             string address1 = @"'C:\Projects\epplusamana_new\EPPlusTest\Workbooks\[FormulaTest.xlsx]Sheet1'#REF!C1";
-            string address2 = @"'C:\Projects\epplusamana_new\EPPlusTest\Workbooks\[FormulaTest.xlsx]Sheet1'SUMME(#REF!A1:B1)";
+            string address2 =
+                @"'C:\Projects\epplusamana_new\EPPlusTest\Workbooks\[FormulaTest.xlsx]Sheet1'SUMME(#REF!A1:B1)";
             Assert.AreEqual(ExcelAddressBase.IsValid(address1), ExcelAddressBase.AddressType.Invalid);
             Assert.AreEqual(ExcelAddressBase.IsValid(address2), ExcelAddressBase.AddressType.Invalid);
         }
@@ -1668,15 +1505,21 @@ namespace EPPlusTest
                 {
                     package.Save();
                 }
+
                 file.Position = 0;
                 using (ExcelPackage package = new ExcelPackage(file))
                 {
                     OfficeOpenXml.Style.XmlAccess.ExcelNamedStyleXml testStyle = null;
-                    Assert.IsFalse(package.Workbook.Styles.NamedStyles.FindByID("Normal", ref testStyle), "A normalstyle should be found now.");
-                    Assert.IsTrue(package.Workbook.Styles.NamedStyles.FindByID("Standard", ref testStyle), "The standardstyle should now be the normal Style");
-                    Assert.AreEqual(0, testStyle.StyleXfId, "The Standardstyle should have the same index as the Normalstyle before.");
-                    Assert.AreEqual(0, testStyle.Style.Font.Index, "The Standardstyle should have the same index as the Normalstyle before.");
-                    Assert.AreEqual(0, testStyle.Style.Numberformat.Index, "The Standardstyle should have the same index as the Normalstyle before.");
+                    Assert.IsFalse(package.Workbook.Styles.NamedStyles.FindByID("Normal", ref testStyle),
+                        "A normalstyle should be found now.");
+                    Assert.IsTrue(package.Workbook.Styles.NamedStyles.FindByID("Standard", ref testStyle),
+                        "The standardstyle should now be the normal Style");
+                    Assert.AreEqual(0, testStyle.StyleXfId,
+                        "The Standardstyle should have the same index as the Normalstyle before.");
+                    Assert.AreEqual(0, testStyle.Style.Font.Index,
+                        "The Standardstyle should have the same index as the Normalstyle before.");
+                    Assert.AreEqual(0, testStyle.Style.Numberformat.Index,
+                        "The Standardstyle should have the same index as the Normalstyle before.");
                 }
             }
 
@@ -1686,7 +1529,8 @@ namespace EPPlusTest
         [TestMethod]
         public void RemoveCommentsIssue()
         {
-            using (var p = new ExcelPackage(new FileInfo(@"C:\Users\larissa.hohaus\Documents\EPPlus\empty_Dokument.xlsx")))
+            using (var p =
+                new ExcelPackage(new FileInfo(@"C:\Users\larissa.hohaus\Documents\EPPlus\empty_Dokument.xlsx")))
             {
                 var sheet = p.Workbook.Worksheets.First();
 
@@ -1701,7 +1545,8 @@ namespace EPPlusTest
 
                 foreach (var cell in sheet.Cells)
                 {
-                    if (cell.Comment != null ){
+                    if (cell.Comment != null)
+                    {
                         sheet.Comments.Remove(cell.Comment);
                     }
                 }
@@ -1718,11 +1563,13 @@ namespace EPPlusTest
         [TestMethod]
         public void ParserProblem2()
         {
-            using (var p = new ExcelPackage(new FileInfo(@"C:\Users\larissa.hohaus\Desktop\BugFixTests\SN_T_1506337027_Kapitel.xlsx")))
+            using (var p =
+                new ExcelPackage(
+                    new FileInfo(@"C:\Users\larissa.hohaus\Desktop\BugFixTests\SN_T_1506337027_Kapitel.xlsx")))
             {
                 var sheet = p.Workbook.Worksheets["Tabelle1"];
                 //sheet.NameSpaceManager.LookupNamespace("outerea");
-                
+
                 Dictionary<int, String> _vsheetFormula = new Dictionary<int, string>();
                 Dictionary<int, String> _vsheetFormulaExpected = new Dictionary<int, string>();
                 _vsheetFormulaExpected[0] = "";
@@ -1740,11 +1587,11 @@ namespace EPPlusTest
                 //    //_vsheetFormula[cell.Start.Row] = cell.Formula;
                 //    colRange = $"{colRange};{cell.Address}";
                 //}
-                
+
 
                 Assert.AreEqual(_vsheetFormulaExpected, _vsheetFormula);
                 Assert.AreEqual(";C1;C2;C3;C4", colRange);
-                
+
             }
         }
 
@@ -1791,7 +1638,7 @@ namespace EPPlusTest
                 var result = String.Empty;
                 var rowId = String.Empty;
                 var rowIds = String.Empty;
-                
+
                 foreach (var cell in sheet.Cells["A:A"])
                 {
                     counterColRange++;
@@ -1804,6 +1651,7 @@ namespace EPPlusTest
                     rowIds = $"{rowIds};{cell.Start.Row}";
 
                 }
+
                 //Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7;A8;A9;A10;A11;A12", colRange);
                 Assert.AreEqual(";A2;A3;A4;A5;A6;A7;A8;A10;A11;A12", colRange);
                 //Assert.AreEqual(";1;2;3;4;5;6;7;8;9;10;11;12", rowIds);
@@ -1833,6 +1681,7 @@ namespace EPPlusTest
                     rowIds = $"{rowIds};{cell.Start.Row}";
 
                 }
+
                 //Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7;A8;A9;A10;A11;A12", colRange);
                 Assert.AreEqual(";A2;A3;A4;A5;A6;A7;A8;A10;A11;A12", colRange);
                 //Assert.AreEqual(";1;2;3;4;5;6;7;8;9;10;11;12", rowIds);
@@ -1912,6 +1761,7 @@ namespace EPPlusTest
                     counterSecondIteration++;
                     cellsSecondIteration = $"{cellsSecondIteration};{cell.Address}";
                 }
+
                 Assert.AreEqual(cellsFirstIteration, cellsSecondIteration);
                 Assert.AreEqual(cellsFirstIteration, ";A1;A2;A3;A5;A6;A7;A8;A10;A9;A11");
 
@@ -1922,11 +1772,12 @@ namespace EPPlusTest
 
 
                 var rangeSingleAdress = sheet.Cells["A1"];
-               foreach (var cell in rangeSingleAdress)
+                foreach (var cell in rangeSingleAdress)
                 {
                     CounterSingleAdress++;
                     cellsSingleAdress = $"{cellsSingleAdress};{cell.Address}";
                 }
+
                 Assert.AreEqual(";A1", cellsSingleAdress);
                 Assert.AreEqual(1, CounterSingleAdress);
 
@@ -1937,6 +1788,7 @@ namespace EPPlusTest
                     CounterSingleAdress++;
                     cellsSingleAdress = $"{cellsSingleAdress};{cell.Address}";
                 }
+
                 Assert.AreEqual(";A1", cellsSingleAdress);
                 Assert.AreEqual(1, CounterSingleAdress);
 
@@ -1948,6 +1800,7 @@ namespace EPPlusTest
                     CounterMultipleRanges++;
                     cellsMultipleRanges = $"{cellsMultipleRanges};{cell.Address}";
                 }
+
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7;A8;A9;A10;A11", cellsMultipleRanges);
                 Assert.AreEqual(11, CounterMultipleRanges);
 
@@ -1958,6 +1811,7 @@ namespace EPPlusTest
                     CounterMultipleRanges++;
                     cellsMultipleRanges = $"{cellsMultipleRanges};{cell.Address}";
                 }
+
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7;A8;A9;A10;A11", cellsMultipleRanges);
                 Assert.AreEqual(11, CounterMultipleRanges);
 
@@ -1969,6 +1823,7 @@ namespace EPPlusTest
                     CounterRangesFirst++;
                     cellsRangesFirst = $"{cellsRangesFirst};{cell.Address}";
                 }
+
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7", cellsRangesFirst);
                 Assert.AreEqual(7, CounterRangesFirst);
 
@@ -1979,6 +1834,7 @@ namespace EPPlusTest
                     CounterRangesFirst++;
                     cellsRangesFirst = $"{cellsRangesFirst};{cell.Address}";
                 }
+
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7", cellsRangesFirst);
                 Assert.AreEqual(7, CounterRangesFirst);
 
@@ -1990,6 +1846,7 @@ namespace EPPlusTest
                     CounterRangesLast++;
                     cellsRangesLast = $"{cellsRangesLast};{cell.Address}";
                 }
+
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7", cellsRangesLast);
                 Assert.AreEqual(7, CounterRangesLast);
 
@@ -2000,6 +1857,7 @@ namespace EPPlusTest
                     CounterRangesLast++;
                     cellsRangesLast = $"{cellsRangesLast};{cell.Address}";
                 }
+
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7", cellsRangesLast);
                 Assert.AreEqual(7, CounterRangesLast);
 
@@ -2011,6 +1869,7 @@ namespace EPPlusTest
                     counterOneRange++;
                     cellsOneRange = $"{cellsOneRange};{cell.Address}";
                 }
+
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7", cellsOneRange);
                 Assert.AreEqual(7, counterOneRange);
 
@@ -2021,6 +1880,7 @@ namespace EPPlusTest
                     counterOneRange++;
                     cellsOneRange = $"{cellsOneRange};{cell.Address}";
                 }
+
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7", cellsOneRange);
                 Assert.AreEqual(7, counterOneRange);
 
@@ -2032,6 +1892,7 @@ namespace EPPlusTest
                     counterNoRanges++;
                     cellsNoRanges = $"{cellsNoRanges};{cell.Address}";
                 }
+
                 Assert.AreEqual(";A1;A2;A3;A4", cellsNoRanges);
                 Assert.AreEqual(4, counterNoRanges);
 
@@ -2042,6 +1903,7 @@ namespace EPPlusTest
                     counterNoRanges++;
                     cellsNoRanges = $"{cellsNoRanges};{cell.Address}";
                 }
+
                 Assert.AreEqual(";A1;A2;A3;A4", cellsNoRanges);
                 Assert.AreEqual(4, counterNoRanges);
 
@@ -2053,16 +1915,18 @@ namespace EPPlusTest
                     counterMixed++;
                     cellsMixed = $"{cellsMixed};{cell.Address}";
                 }
-                Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7" , cellsMixed);
+
+                Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7", cellsMixed);
                 Assert.AreEqual(7, counterMixed);
 
-                counterMixed=0;
+                counterMixed = 0;
                 cellsMixed = String.Empty;
                 foreach (var cell in rangeMixed)
                 {
                     counterMixed++;
                     cellsMixed = $"{cellsMixed};{cell.Address}";
                 }
+
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7", cellsMixed);
                 Assert.AreEqual(7, counterMixed);
 
@@ -2075,6 +1939,7 @@ namespace EPPlusTest
                     counter++;
                     cells = $"{cells};{cell.Address}";
                 }
+
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7;A8;A9;A10;A11;A12", cells);
                 Assert.AreEqual(12, counter);
 
@@ -2085,6 +1950,7 @@ namespace EPPlusTest
                     counter++;
                     cells = $"{cells};{cell.Address}";
                 }
+
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7;A8;A9;A10;A11;A12", cells);
                 Assert.AreEqual(12, counter);
 
@@ -2097,6 +1963,7 @@ namespace EPPlusTest
                     counterColRange++;
                     colRange = $"{colRange};{cell.Address}";
                 }
+
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7;A8;A9;A10;A11;A12", colRange);
                 Assert.AreEqual(12, counterColRange);
 
@@ -2107,6 +1974,7 @@ namespace EPPlusTest
                     counterColRange++;
                     colRange = $"{colRange};{cell.Address}";
                 }
+
                 Assert.AreEqual(";A1;A2;A3;A4;A5;A6;A7;A8;A9;A10;A11;A12", colRange);
                 Assert.AreEqual(12, counterColRange);
 
@@ -2114,7 +1982,7 @@ namespace EPPlusTest
 
 
 
-               // var cellA13 = sheet.Cells["A13"];
+                // var cellA13 = sheet.Cells["A13"];
                 var cellB13 = sheet.Cells["B13"];
                 var cellC13 = sheet.Cells["C13"];
                 var cellD13 = sheet.Cells["D13"];
@@ -2146,6 +2014,7 @@ namespace EPPlusTest
                     counterHorizontal++;
                     rows = $"{rows};{cell.Address}";
                 }
+
                 Assert.AreEqual(";B13;C13;D13;E13;F13;H13;I13;J13;K13;L13", rows);
                 Assert.AreEqual(10, counterHorizontal);
 
@@ -2156,6 +2025,7 @@ namespace EPPlusTest
                     counterHorizontal++;
                     rows = $"{rows};{cell.Address}";
                 }
+
                 Assert.AreEqual(";B13;C13;D13;E13;F13;H13;I13;J13;K13;L13", rows);
                 Assert.AreEqual(10, counterHorizontal);
 
@@ -2175,7 +2045,8 @@ namespace EPPlusTest
                     exlPackage.Workbook.Worksheets.First().Cells["A1"].Value = "Changed Value";
                     exlPackage.Workbook.Calculate();
 
-                    Assert.AreEqual("Changed Value", exlPackage.Workbook.Worksheets.First().Cells["A4"].Value.ToString());
+                    Assert.AreEqual("Changed Value",
+                        exlPackage.Workbook.Worksheets.First().Cells["A4"].Value.ToString());
                 }
             }
         }
@@ -2211,7 +2082,7 @@ namespace EPPlusTest
                     Assert.AreEqual(112d, ws.Cells["C12"].Value);
                     Assert.AreEqual(113d, ws.Cells["C13"].Value);
                     Assert.AreEqual(114d, ws.Cells["C14"].Value);
-                    
+
                     //range3+range4 vertical
                     Assert.AreEqual(101d, ws.Cells["F21"].Value);
                     Assert.AreEqual(102d, ws.Cells["G21"].Value);
@@ -2396,26 +2267,26 @@ namespace EPPlusTest
                     var ws = exlPackage.Workbook.Worksheets[1];
 
                     ws.Calculate();
-                    
+
                     //no Parameter
-                    for(int i=1; i<=ws.Cells["A:A"].Count(); i++)
-                            Assert.AreEqual(ws.Cells[i, 1].Value, ws.Cells[i, (1+11)].Value);
-                        
+                    for (int i = 1; i <= ws.Cells["A:A"].Count(); i++)
+                        Assert.AreEqual(ws.Cells[i, 1].Value, ws.Cells[i, (1 + 11)].Value);
+
                     //Parameter 0
                     for (int i = 1; i <= ws.Cells["B:B"].Count(); i++)
-                        Assert.AreEqual(ws.Cells[i, 2].Value, ws.Cells[i, (2+11)].Value);
+                        Assert.AreEqual(ws.Cells[i, 2].Value, ws.Cells[i, (2 + 11)].Value);
                     //Parameter 1
                     for (int i = 1; i <= ws.Cells["C:C"].Count(); i++)
-                        Assert.AreEqual(ws.Cells[i, 3].Value, ws.Cells[i, (3+11)].Value);
+                        Assert.AreEqual(ws.Cells[i, 3].Value, ws.Cells[i, (3 + 11)].Value);
                     //Parameter 2
                     for (int i = 1; i <= ws.Cells["D:D"].Count(); i++)
-                        Assert.AreEqual(ws.Cells[i, 4].Value, ws.Cells[i, (4+11)].Value);
+                        Assert.AreEqual(ws.Cells[i, 4].Value, ws.Cells[i, (4 + 11)].Value);
                     //Parameter 3
                     for (int i = 1; i <= ws.Cells["E:E"].Count(); i++)
-                        Assert.AreEqual(ws.Cells[i, 5].Value, ws.Cells[i, (5+11)].Value);
+                        Assert.AreEqual(ws.Cells[i, 5].Value, ws.Cells[i, (5 + 11)].Value);
                     //Parameter 4
                     for (int i = 1; i <= ws.Cells["F:F"].Count(); i++)
-                        Assert.AreEqual(ws.Cells[i, 6].Value, ws.Cells[i, (6+11)].Value);
+                        Assert.AreEqual(ws.Cells[i, 6].Value, ws.Cells[i, (6 + 11)].Value);
                     //Parameter TRUE
                     for (int i = 1; i <= ws.Cells["G:G"].Count(); i++)
                         Assert.AreEqual(ws.Cells[i, 7].Value, ws.Cells[i, (7 + 11)].Value);
@@ -2489,14 +2360,307 @@ namespace EPPlusTest
         }
 
 
+        [TestMethod]
+        public void Issue15347()
+        {
+            using (var file = new MemoryStream())
+            {
+                file.Write(EPPlusTest.Properties.Resources.Issue15347Test, 0,
+                    EPPlusTest.Properties.Resources.Issue15347Test.Length);
+                using (ExcelPackage package = new ExcelPackage(file))
+                {
+
+                    var sheet = package.Workbook.Worksheets[1];
+
+                    ExcelRange range = sheet.Cells[1, 1];
+                    package.Save();
+                }
+
+                using (ExcelPackage package = new ExcelPackage(file))
+                {
+                    var sheet = package.Workbook.Worksheets["Tabelle1"];
+                    ExcelRange range = sheet.Cells[1, 1];
+                    Assert.IsTrue(range.Value is string);
+                }
+            }
+        }
 
 
+        [TestMethod]
+        public void Issue15353_QuotsInNamedRanges()
+        {
+            var package = new ExcelPackage();
+            var sheet = package.Workbook.Worksheets.Add("My 'Sheet");
+            var namedRange1 = package.Workbook.Names.Add("name1", new ExcelRangeBase(sheet, "$B$1"));
+
+            Assert.AreEqual(namedRange1.FullAddressAbsolute, "'My ''Sheet'!$B$1");
 
 
-        public int Index { get; }
+            //"My "Sheet"            //'My "Sheet'!$A$1
+
+        }
+
+        [TestMethod]
+        public void Issue15353_QuotsInFormulae()
+        {
+            //positive Example 1:
+            TokenizerContext formulaContext1 = new TokenizerContext("= part1 & \" is \'\" & yearshort");
+
+            formulaContext1.ToggleIsInSheetName();
+
+            TokenHandler handlerSheetName1 =
+                new TokenHandler(formulaContext1, _tokenFactory, new TokenSeparatorProvider());
+            handlerSheetName1.Worksheet = "My 'Sheet";
+
+            while (handlerSheetName1.HasMore())
+            {
+                handlerSheetName1.Next();
+            }
+
+            var _syntAnalyzer = new SyntacticAnalyzer();
+
+            try
+            {
+                _syntAnalyzer.Analyze(formulaContext1.Result);
+
+            }
+            catch
+            {
+                Assert.IsTrue(false, "Syntactic analyzer throws exception on a valid string");
+            }
+
+
+            //positive Example 2:
+
+            TokenizerContext formulaContext2 = new TokenizerContext("= part1 & \" is \"\"some\"\" \" & yearshort");
+
+            formulaContext2.ToggleIsInSheetName();
+
+            TokenHandler handlerSheetName2 =
+                new TokenHandler(formulaContext2, _tokenFactory, new TokenSeparatorProvider());
+            handlerSheetName2.Worksheet = "My 'Sheet";
+
+            while (handlerSheetName2.HasMore())
+            {
+                handlerSheetName2.Next();
+            }
+
+            var _syntAnalyzer2 = new SyntacticAnalyzer();
+
+            try
+            {
+                _syntAnalyzer2.Analyze(formulaContext2.Result);
+
+            }
+            catch
+            {
+                Assert.IsTrue(false, "Syntactic analyzer throws exception on a valid string");
+            }
+
+
+            //positive Example 3:
+
+            TokenizerContext formulaContext3 = new TokenizerContext("= part1 & \" is some \"\"\" & yearshort");
+
+            formulaContext3.ToggleIsInSheetName();
+
+            TokenHandler handlerSheetName3 =
+                new TokenHandler(formulaContext3, _tokenFactory, new TokenSeparatorProvider());
+            handlerSheetName3.Worksheet = "My 'Sheet";
+
+            while (handlerSheetName3.HasMore())
+            {
+                handlerSheetName3.Next();
+            }
+
+            var _syntAnalyzer3 = new SyntacticAnalyzer();
+
+            try
+            {
+                _syntAnalyzer3.Analyze(formulaContext3.Result);
+            }
+            catch
+            {
+                Assert.IsTrue(false, "Syntactic analyzer throws exception on a valid string");
+            }
+
+
+            //positive Example 4:
+
+            TokenizerContext formulaContext4 = new TokenizerContext("= part1 & \"\' is some\'\" & yearshort");
+
+            formulaContext4.ToggleIsInSheetName();
+
+            TokenHandler handlerSheetName4 =
+                new TokenHandler(formulaContext4, _tokenFactory, new TokenSeparatorProvider());
+            handlerSheetName4.Worksheet = "My 'Sheet";
+
+            while (handlerSheetName4.HasMore())
+            {
+                handlerSheetName4.Next();
+            }
+
+            var _syntAnalyzer4 = new SyntacticAnalyzer();
+
+            try
+            {
+                _syntAnalyzer4.Analyze(formulaContext4.Result);
+
+            }
+            catch
+            {
+                Assert.IsTrue(false, "Syntactic analyzer throws exception on a valid string");
+            }
+
+
+            //positive Example 5:
+
+            TokenizerContext formulaContext5 = new TokenizerContext("= part1 & \" is some\'\'\" & yearshort");
+
+            formulaContext5.ToggleIsInSheetName();
+
+            TokenHandler handlerSheetName5 =
+                new TokenHandler(formulaContext5, _tokenFactory, new TokenSeparatorProvider());
+            handlerSheetName5.Worksheet = "My 'Sheet";
+
+            while (handlerSheetName5.HasMore())
+            {
+                handlerSheetName5.Next();
+            }
+
+            var _syntAnalyzer5 = new SyntacticAnalyzer();
+
+            try
+            {
+                _syntAnalyzer5.Analyze(formulaContext5.Result);
+            }
+            catch
+            {
+                Assert.IsTrue(false, "Syntactic analyzer throws exception on a valid string");
+            }
+
+
+            //negative Example 1:
+
+            TokenizerContext formulaContext6 = new TokenizerContext("= part1 & \" is \"\"some\" \" & yearshort");
+
+
+            formulaContext6.ToggleIsInSheetName();
+
+            TokenHandler handlerSheetName6 =
+                new TokenHandler(formulaContext6, _tokenFactory, new TokenSeparatorProvider());
+            handlerSheetName6.Worksheet = "My 'Sheet";
+
+            while (handlerSheetName6.HasMore())
+            {
+                handlerSheetName6.Next();
+            }
+
+            var _syntAnalyzer6 = new SyntacticAnalyzer();
+
+            try
+            {
+                _syntAnalyzer6.Analyze(formulaContext6.Result);
+                Assert.Fail("Syntactic analyzer has to throw an exception on an invalid string");
+            }
+            catch
+            {
+            }
+            //negative Example 2: 
+
+            TokenizerContext formulaContext7 = new TokenizerContext("= part1 & \" is some \"\" & yearshort");
+
+            formulaContext7.ToggleIsInSheetName();
+
+            TokenHandler handlerSheetName7 =
+                new TokenHandler(formulaContext7, _tokenFactory, new TokenSeparatorProvider());
+            handlerSheetName7.Worksheet = "My 'Sheet";
+
+            while (handlerSheetName7.HasMore())
+            {
+                handlerSheetName7.Next();
+            }
+
+            var _syntAnalyzer7 = new SyntacticAnalyzer();
+
+            try
+            {
+                _syntAnalyzer7.Analyze(formulaContext7.Result);
+                Assert.Fail("Syntactic analyzer has to throw an exception on an invalid string");
+            }
+            catch
+            {
+            }
+
+            //negative Example 3:
+
+            TokenizerContext formulaContext8 = new TokenizerContext("= part1 & \"\' is some\' & yearshort");
+
+            //negative
+            //= part1 & " is some'' & yearshort
+
+
+            formulaContext8.ToggleIsInSheetName();
+
+            TokenHandler handlerSheetName8 =
+                new TokenHandler(formulaContext8, _tokenFactory, new TokenSeparatorProvider());
+            handlerSheetName8.Worksheet = "My 'Sheet";
+
+            while (handlerSheetName8.HasMore())
+            {
+                handlerSheetName8.Next();
+            }
+
+            var _syntAnalyzer8 = new SyntacticAnalyzer();
+
+            try
+            {
+                _syntAnalyzer8.Analyze(formulaContext8.Result);
+                Assert.Fail("Syntactic analyzer has to throw an exception on an invalid string");
+            }
+            catch
+            {
+
+            }
+
+
+            //negative Example 4: 
+
+            TokenizerContext formulaContext9 = new TokenizerContext("= part1 & \" is some\'\' & yearshort");
+
+            formulaContext9.ToggleIsInSheetName();
+
+            TokenHandler handlerSheetName9 =
+                new TokenHandler(formulaContext9, _tokenFactory, new TokenSeparatorProvider());
+            handlerSheetName9.Worksheet = "My 'Sheet";
+
+            while (handlerSheetName9.HasMore())
+            {
+                handlerSheetName9.Next();
+            }
+
+            var _syntAnalyzer9 = new SyntacticAnalyzer();
+
+            try
+            {
+                _syntAnalyzer9.Analyze(formulaContext9.Result);
+                Assert.Fail("Syntactic analyzer has to throw an exception on an invalid string");
+            }
+            catch
+            {
+
+            }
+
+        }
+
+        public int Index
+        {
+            get { return _index; }
+        }
+
         public void MoveIndexPointerForward()
         {
-            throw new NotImplementedException();
+            _index++;
         }
     }
 }

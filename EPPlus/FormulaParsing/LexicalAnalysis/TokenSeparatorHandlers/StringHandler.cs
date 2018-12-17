@@ -40,14 +40,15 @@ namespace OfficeOpenXml.FormulaParsing.LexicalAnalysis.TokenSeparatorHandlers
         public override bool Handle(char c, Token tokenSeparator, TokenizerContext context, ITokenIndexProvider tokenIndexProvider)
         {
             if(context.IsInString)
-            { 
-                if (IsDoubleQuote(tokenSeparator, tokenIndexProvider.Index, context))
+            {
+
+                if (context.StringStartingQuot == c && IsDoubleQuote(tokenSeparator, tokenIndexProvider.Index, context))
                 {
                     tokenIndexProvider.MoveIndexPointerForward();
                     context.AppendToCurrentToken(c);
                     return true;
                 }
-                if (tokenSeparator.TokenType != TokenType.String)
+                if (tokenSeparator.TokenType != TokenType.String || c != context.StringStartingQuot)
                 {
                     context.AppendToCurrentToken(c);
                     return true;
@@ -59,7 +60,7 @@ namespace OfficeOpenXml.FormulaParsing.LexicalAnalysis.TokenSeparatorHandlers
                 if (context.LastToken != null && context.LastToken.TokenType == TokenType.OpeningEnumerable)
                 {
                     context.AppendToCurrentToken(c);
-                    context.ToggleIsInString();
+                    context.ToggleIsInString(c);
                     return true;
                 }
                 if (context.LastToken != null && context.LastToken.TokenType == TokenType.String)
@@ -69,7 +70,7 @@ namespace OfficeOpenXml.FormulaParsing.LexicalAnalysis.TokenSeparatorHandlers
                         : new Token(context.CurrentToken, TokenType.StringContent));
                 }
                 context.AddToken(new Token("\"", TokenType.String));
-                context.ToggleIsInString();
+                context.ToggleIsInString(c);
                 context.NewToken();
                 return true;
             }

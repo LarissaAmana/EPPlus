@@ -73,9 +73,16 @@ namespace OfficeOpenXml.FormulaParsing.LexicalAnalysis
             private set;
         }
 
-        public void ToggleIsInString()
+        public Char StringStartingQuot
+        {
+            get;
+            private set;
+        }
+
+        public void ToggleIsInString(Char quot)
         {
             IsInString = !IsInString;
+            if (IsInString) StringStartingQuot = quot;
         }
 
         public void ToggleIsInSheetName()

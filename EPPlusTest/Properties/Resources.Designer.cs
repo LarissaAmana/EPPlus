@@ -73,7 +73,17 @@ namespace EPPlusTest.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-internal static byte[] Issue_KeyNotFoundSaveProblem {
+        internal static byte[] GermanBuildInNumberFormat {
+            get {
+                object obj = ResourceManager.GetObject("GermanBuildInNumberFormat", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Issue_KeyNotFoundSaveProblem {
             get {
                 object obj = ResourceManager.GetObject("Issue_KeyNotFoundSaveProblem", resourceCulture);
                 return ((byte[])(obj));
@@ -93,6 +103,16 @@ internal static byte[] Issue_KeyNotFoundSaveProblem {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] Issue15347Test {
+            get {
+                object obj = ResourceManager.GetObject("Issue15347Test", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] Layout_Format_vorlage {
             get {
                 object obj = ResourceManager.GetObject("Layout_Format_vorlage", resourceCulture);
@@ -103,9 +123,9 @@ internal static byte[] Issue_KeyNotFoundSaveProblem {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] Issue15347Test {
+        internal static byte[] Reproduce_StandardStyle_Issue15361 {
             get {
-                object obj = ResourceManager.GetObject("Issue15347Test", resourceCulture);
+                object obj = ResourceManager.GetObject("Reproduce_StandardStyle_Issue15361", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -126,16 +146,6 @@ internal static byte[] Issue_KeyNotFoundSaveProblem {
         internal static byte[] Roman_allNumbers {
             get {
                 object obj = ResourceManager.GetObject("Roman_allNumbers", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] Reproduce_StandardStyle_Issue15361 {
-            get {
-                object obj = ResourceManager.GetObject("Reproduce_StandardStyle_Issue15361", resourceCulture);
                 return ((byte[])(obj));
             }
         }

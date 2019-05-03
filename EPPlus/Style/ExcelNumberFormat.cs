@@ -218,7 +218,7 @@ namespace OfficeOpenXml.Style
                 case 38:
                     return "#,##0 _€;[Red]-#,##0 _€";
                 case 39:
-                    return "#,##0,00 _€;-#,##0.00 _€";
+                    return "#,##0.00 _€;-#,##0.00 _€";
                 case 40:
                     return "#,##0.00 _€;[Red]-#,##0.00 _€";
                 case 45:
@@ -357,7 +357,7 @@ namespace OfficeOpenXml.Style
                     return 37;
                 case "#,##0 _€;[Red]-#,##0 _€":
                     return 38;
-                case "#,##0,00 _€;-#,##0.00 _€":
+                case "#,##0.00 _€;-#,##0.00 _€":
                     return 39;
                 case "#,##0.00 _€;[Red]-#,##0.00 _€":
                     return 40;

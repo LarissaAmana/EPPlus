@@ -2709,7 +2709,7 @@ namespace EPPlusTest
                         Assert.AreEqual("#,##0 _€;[Red]-#,##0 _€", excelFormatString_8);
 
                         var excelFormatString_9 = ws.Cells[9, 1].Style?.Numberformat?.Format;
-                        Assert.AreEqual("#,##0,00 _€;-#,##0.00 _€", excelFormatString_9);
+                        Assert.AreEqual("#,##0.00 _€;-#,##0.00 _€", excelFormatString_9);
 
                         var excelFormatString_10 = ws.Cells[10, 1].Style?.Numberformat?.Format;
                         Assert.AreEqual("#,##0.00 _€;[Red]-#,##0.00 _€", excelFormatString_10);

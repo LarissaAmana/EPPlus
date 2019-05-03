@@ -2935,7 +2935,51 @@ namespace EPPlusTest
             }
         }
 
-        public int Index
+
+
+        [TestMethod]
+        public void IssueWhitespaceInChartXml()
+        {
+            //Issue: If a Chart.xml contains ExtLst Nodes than the indentation of the chart.xml leads to corrupt Excefiles
+            var excelTestFile = Resources.ChartIndentation;
+            using (MemoryStream excelStream = new MemoryStream())
+            {
+                excelStream.Write(excelTestFile, 0, excelTestFile.Length);
+
+                using (ExcelPackage exlPackage = new ExcelPackage(excelStream))
+                {
+                    var savePath = Path.Combine(TestContext.TestDeploymentDir, $"{TestContext.TestName}.xlsx");
+                    exlPackage.SaveAs(new FileInfo(savePath));
+                    var exApp = new Microsoft.Office.Interop.Excel.Application();
+
+                    try
+                    {
+                        var exWbk = exApp.Workbooks.Open(savePath);
+                    }
+                    catch (System.Runtime.InteropServices.COMException)
+                    {
+                        Assert.Fail("It is not possible to open the workbook after EPPlus saved it.");
+                    }
+                    finally
+                    {
+                        exApp.Workbooks.Close();
+                    }
+                }
+            }
+        }
+
+
+
+        private TestContext _testContext;
+
+
+
+        public TestContext TestContext
+        {
+            get => _testContext;
+            set => _testContext = value;
+        }
+    public int Index
         {
             get { return _index; }
         }

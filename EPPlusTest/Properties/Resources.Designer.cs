@@ -63,6 +63,16 @@ namespace EPPlusTest.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] ChartIndentation {
+            get {
+                object obj = ResourceManager.GetObject("ChartIndentation", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] ExternalReferences {
             get {
                 object obj = ResourceManager.GetObject("ExternalReferences", resourceCulture);

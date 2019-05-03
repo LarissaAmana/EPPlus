@@ -71,6 +71,11 @@
     <DocumentationFile>bin\Release 4.0\EPPlusTest.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>False</Private>
     </Reference>
@@ -229,6 +234,7 @@
     <None Include="packages.config" />
     <EmbeddedResource Include="Resources\Vector Drawing.wmf" />
     <EmbeddedResource Include="Resources\Vector Drawing2.wmf" />
+    <None Include="Resources\ChartIndentation.xlsx" />
     <None Include="Resources\ExternalReferences.xlsx" />
     <None Include="Resources\GermanBuildInNumberFormat.xlsx" />
     <None Include="Resources\Issue15347Test.xlsx" />

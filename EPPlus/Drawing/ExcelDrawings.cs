@@ -78,8 +78,8 @@ namespace OfficeOpenXml.Drawing
         internal Packaging.ZipPackageRelationship _drawingRelation = null;
         internal ExcelDrawings(ExcelPackage xlPackage, ExcelWorksheet sheet)
         {
-                _drawingsXml = new XmlDocument();                
-                _drawingsXml.PreserveWhitespace = false;
+                _drawingsXml = new XmlDocument();
+                _drawingsXml.PreserveWhitespace = true;
                 _drawings = new List<ExcelDrawing>();
                 _drawingNames = new Dictionary<string,int>(StringComparer.InvariantCultureIgnoreCase);
                 _package = xlPackage;

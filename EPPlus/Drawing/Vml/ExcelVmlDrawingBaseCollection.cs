@@ -42,8 +42,8 @@ namespace OfficeOpenXml.Drawing.Vml
         internal ExcelVmlDrawingBaseCollection(ExcelPackage pck, ExcelWorksheet ws, Uri uri)
         {
             VmlDrawingXml = new XmlDocument();
-            VmlDrawingXml.PreserveWhitespace = false;
-            
+            VmlDrawingXml.PreserveWhitespace = true;
+
             NameTable nt=new NameTable();
             NameSpaceManager = new XmlNamespaceManager(nt);
             NameSpaceManager.AddNamespace("v", ExcelPackage.schemaMicrosoftVml);

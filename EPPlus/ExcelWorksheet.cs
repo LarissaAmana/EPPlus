@@ -3031,6 +3031,7 @@ namespace OfficeOpenXml
                             if (d is ExcelChart)
                             {
                                 ExcelChart c = (ExcelChart)d;
+                                c.ChartXml.PreserveWhitespace = true;
                                 c.ChartXml.Save(c.Part.GetStream(FileMode.Create, FileAccess.Write));
                             }
                         }

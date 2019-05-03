@@ -757,6 +757,10 @@ namespace OfficeOpenXml
             {
                 NamedStyles[normalIx].newID = 0;
                 AddNamedStyle(0, styleXfsNode, cellXfsNode, NamedStyles[normalIx]);
+                if (NamedStyles[normalIx].XfId == int.MinValue && NamedStyles[normalIx].BuildInId == 0)
+                {
+                    NamedStyles[normalIx].XfId = 0;
+                }
                 var styleXfs = CellStyleXfs[NamedStyles[normalIx].XfId];
                 styleXfs.newID = 0;
                 styleXfs.XfId = 0;

@@ -2653,6 +2653,24 @@ namespace EPPlusTest
 
         }
 
+        [TestMethod]
+        public void canNotSaveWithFileInfoAfterSavingPackageAsStream()
+        {
+            //If we save the file As a Stream and then saving it again an Index Out Of Range Exception is thrown. (Nachtrag Ticket #62877)
+            ExcelPackage packageNew = new ExcelPackage();
+            packageNew.Workbook.Worksheets.Add("sheet_1");
+            
+
+            using (var stream = new MemoryStream())
+            {
+                packageNew.SaveAs(stream);
+            }
+
+            packageNew.Save();
+
+
+        }
+
         public int Index
         {
             get { return _index; }

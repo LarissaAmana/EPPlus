@@ -116,7 +116,7 @@ namespace OfficeOpenXml.FormulaParsing.ExpressionGraph
             if (cell == null)
                 return CompileResult.Empty;
             var factory = new CompileResultFactory();
-            var compileResult = factory.Create(cell.Value);
+            var compileResult = factory.Create(result.GetValue(result.Address._fromRow, result.Address._fromCol));
             if (_negate && compileResult.IsNumeric)
             {
                 compileResult = new CompileResult(compileResult.ResultNumeric * -1, compileResult.DataType);

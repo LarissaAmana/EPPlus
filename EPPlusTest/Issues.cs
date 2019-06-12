@@ -2969,6 +2969,27 @@ namespace EPPlusTest
         }
 
 
+        [TestMethod]
+        public void IssueTableWithXmlTags()
+        {
+            //Issue: If a cell is richtext and gets refrenced by another cell by formula the Cell gets the Xml-Node as Value.
+            var excelTestFile = Resources.XMLTagsTable;
+            using (MemoryStream excelStream = new MemoryStream())
+            {
+                excelStream.Write(excelTestFile, 0, excelTestFile.Length);
+
+
+                using (ExcelPackage exlPackage = new ExcelPackage(excelStream))
+                {
+                    var sheet = exlPackage.Workbook.Worksheets["Tabelle1"];
+                    Assert.AreEqual(sheet.Cells["A1"].Value, sheet.Cells["B1"].Value);
+                    sheet.Calculate();
+                    Assert.AreEqual(sheet.Cells["A1"].Value, sheet.Cells["B1"].Value);
+                }
+            }
+        }
+
+
 
         private TestContext _testContext;
 

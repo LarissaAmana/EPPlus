@@ -247,6 +247,7 @@
     <None Include="Resources\TestDoc_NamedRangeInFormula.xlsx" />
     <None Include="Resources\TestFile_Issue15399.xlsx" />
     <None Include="Resources\Trim.xlsx" />
+    <None Include="Resources\XMLTagsTable.xlsx" />
     <None Include="Workbooks\FormulaTest.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

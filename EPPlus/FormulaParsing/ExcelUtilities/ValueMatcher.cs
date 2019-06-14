@@ -32,6 +32,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OfficeOpenXml.FormulaParsing.ExpressionGraph;
 
 namespace OfficeOpenXml.FormulaParsing.ExcelUtilities
 {
@@ -39,7 +40,7 @@ namespace OfficeOpenXml.FormulaParsing.ExcelUtilities
     {
         public const int IncompatibleOperands = -2;
 
-        public virtual int IsMatch(object o1, object o2)
+        public virtual int IsMatch(object o1, object o2, DataType searchedValueDataType = DataType.Unknown)
         {
             if (o1 != null && o2 == null) return 1;
             if (o1 == null && o2 != null) return -1;
@@ -60,7 +61,23 @@ namespace OfficeOpenXml.FormulaParsing.ExcelUtilities
             {
                 return CompareObjectToString(o1, o2.ToString());
             }
-            return Convert.ToDouble(o1).CompareTo(Convert.ToDouble(o2));
+            else if (o1.GetType() == typeof(System.DateTime))
+            {
+                if (searchedValueDataType == DataType.Date)
+                {
+                    return CompareDateTimes(o1, o2);
+                }
+            }
+            else if (o2.GetType() == typeof(System.DateTime))
+            {
+                if (searchedValueDataType == DataType.Date)
+                {
+                    return CompareDateTimes(o2, o1);
+                }
+            }
+
+
+                return Convert.ToDouble(o1).CompareTo(Convert.ToDouble(o2));
         }
 
         private static object CheckGetRange(object v)
@@ -114,7 +131,28 @@ namespace OfficeOpenXml.FormulaParsing.ExcelUtilities
             {
                 return Convert.ToDouble(o1).CompareTo(d2);
             }
+
             return IncompatibleOperands;
         }
+
+        protected virtual int CompareDateTimes(object o1, object o2)
+        {
+
+
+            System.DateTime d1;
+            if (System.DateTime.TryParse(o1.ToString(), out d1))
+            {
+                if (d1 != System.DateTime.MinValue)
+                {
+                    return d1.ToOADate().CompareTo(o2);
+                }
+            }
+
+            return IncompatibleOperands;
+
+
+        }
+
+        
     }
 }

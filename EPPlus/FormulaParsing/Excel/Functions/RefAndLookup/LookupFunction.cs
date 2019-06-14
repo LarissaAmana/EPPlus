@@ -57,9 +57,9 @@ namespace OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup
             }
         }
 
-        protected int IsMatch(object o1, object o2)
+        protected int IsMatch(object o1, object o2, DataType searchedValueDataType = DataType.Unknown)
         {
-            return _valueMatcher.IsMatch(o1, o2);
+            return _valueMatcher.IsMatch(o1, o2, searchedValueDataType);
         }
 
         protected LookupDirection GetLookupDirection(RangeAddress rangeAddress)
@@ -80,7 +80,7 @@ namespace OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup
             }
             do
             {
-                var matchResult = IsMatch(navigator.CurrentValue, lookupArgs.SearchedValue);
+                var matchResult = IsMatch(navigator.CurrentValue, lookupArgs.SearchedValue, lookupArgs.SearchedValueDataType);
                 if (matchResult != 0)
                 {
                     if (lastValue != null && navigator.CurrentValue == null) break;

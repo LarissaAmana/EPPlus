@@ -209,5 +209,15 @@ namespace EPPlusTest.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] VLookUpDateValue {
+            get {
+                object obj = ResourceManager.GetObject("VLookUpDateValue", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

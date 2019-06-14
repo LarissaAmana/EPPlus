@@ -48,6 +48,7 @@ namespace OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup
         {
             _argumentParsers = argumentParsers;
             SearchedValue = arguments.ElementAt(0).Value;
+            SearchedValueDataType = arguments.ElementAt(0).DataType;
             var arg1 = arguments.ElementAt(1).Value;
             var dataArray = arg1 as IEnumerable<FunctionArgument>;
             if (dataArray != null)
@@ -107,6 +108,8 @@ namespace OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup
         private readonly ArgumentParsers _argumentParsers;
 
         public object SearchedValue { get; private set; }
+
+        public DataType SearchedValueDataType { get; private set; }
 
         public string RangeAddress { get; private set; }
 

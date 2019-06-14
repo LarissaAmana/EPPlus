@@ -2989,6 +2989,30 @@ namespace EPPlusTest
             }
         }
 
+        [TestMethod]
+        public void IssueWithVLookUpDateValue()
+        {
+            //Issue: If a VLookUp-Function contains a Date-Funktion as searchedValue an InvalidCastException is Thrown resulting in an #Value-Result
+            var excelTestFile = Resources.VLookUpDateValue;
+            using (MemoryStream excelStream = new MemoryStream())
+            {
+                excelStream.Write(excelTestFile, 0, excelTestFile.Length);
+
+                using (ExcelPackage exlPackage = new ExcelPackage(excelStream))
+                {
+                    var ws = exlPackage.Workbook.Worksheets[1];
+
+                    ws.Calculate();
+
+                    Assert.AreEqual(ws.Cells["C2"].Value, ws.Cells["E3"].Value);
+
+                }
+            }
+        }
+
+
+
+
 
 
         private TestContext _testContext;

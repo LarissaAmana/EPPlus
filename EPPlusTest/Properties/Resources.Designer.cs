@@ -19,7 +19,7 @@ namespace EPPlusTest.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -86,6 +86,26 @@ namespace EPPlusTest.Properties {
         internal static byte[] GermanBuildInNumberFormat {
             get {
                 object obj = ResourceManager.GetObject("GermanBuildInNumberFormat", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] HyperlinkIssue {
+            get {
+                object obj = ResourceManager.GetObject("HyperlinkIssue", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] HyperlinkIssue1 {
+            get {
+                object obj = ResourceManager.GetObject("HyperlinkIssue1", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -203,9 +223,9 @@ namespace EPPlusTest.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] XMLTagsTable {
+        internal static byte[] VLookUpDateValue {
             get {
-                object obj = ResourceManager.GetObject("XMLTagsTable", resourceCulture);
+                object obj = ResourceManager.GetObject("VLookUpDateValue", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -213,9 +233,9 @@ namespace EPPlusTest.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] VLookUpDateValue {
+        internal static byte[] XMLTagsTable {
             get {
-                object obj = ResourceManager.GetObject("VLookUpDateValue", resourceCulture);
+                object obj = ResourceManager.GetObject("XMLTagsTable", resourceCulture);
                 return ((byte[])(obj));
             }
         }

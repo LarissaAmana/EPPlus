@@ -4073,6 +4073,11 @@ namespace OfficeOpenXml
                         }
                         else
                         {
+                            if (hyp.AbsoluteUri.Length >= 2080)
+                            {
+                                hyp = new Uri("http://ERROR_link_to_long_due_to_special_character_encoding");
+                            }
+                          
                             var relationship = Part.CreateRelationship(hyp, Packaging.TargetMode.External, ExcelPackage.schemaHyperlink);
                             if (uri is ExcelHyperLink)
                             {

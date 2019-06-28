@@ -237,6 +237,7 @@
     <None Include="Resources\ChartIndentation.xlsx" />
     <None Include="Resources\ExternalReferences.xlsx" />
     <None Include="Resources\GermanBuildInNumberFormat.xlsx" />
+    <None Include="Resources\HyperlinkIssue.xlsx" />
     <None Include="Resources\Issue15347Test.xlsx" />
     <None Include="Resources\Issue_KeyNotFoundSaveProblem.xlsx" />
     <None Include="Resources\Issue_WithRangeCalculation.xlsx" />

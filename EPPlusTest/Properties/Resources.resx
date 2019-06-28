@@ -127,11 +127,11 @@
   <data name="GermanBuildInNumberFormat" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\GermanBuildInNumberFormat.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="HyperlinkIssue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\HyperlinkIssue.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="Issue15347Test" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Issue15347Test.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Issue_KeyNotFoundSaveProblem" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Issue_KeyNotFoundSaveProblem.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Issue_WithRangeCalculation" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Issue_WithRangeCalculation.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -165,5 +165,11 @@
   </data>
   <data name="VLookUpDateValue" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\VLookUpDateValue.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="HyperlinkIssue1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\HyperlinkIssue.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Issue_KeyNotFoundSaveProblem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Issue_KeyNotFoundSaveProblem.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

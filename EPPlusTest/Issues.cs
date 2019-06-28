@@ -3011,6 +3011,42 @@ namespace EPPlusTest
         }
 
 
+        [TestMethod]
+        public void IssueCanNotOpenAfterSaving()
+        {
+            //Issue: If a cell contains a hyperlink with special characters such as ä,ö,ü Excel encodes the link not in UTF-8 to keep the rule that a target link must be shorter than 2080 characters. 
+            //Epplus always uses the normal UTF-8 encoding.In this case the Hyperlink would likely extend to over 2079 characters, resulting in a corrupt Excelfile that can not be opened from Excel.
+            //To fix this problem I simply replaced the Hyperlink with a link that is a error - message, even though to fully mimic the behaviour from Excel a bigger fix would be necessary.
+
+            var excelTestFile = Resources.HyperlinkIssue;
+
+            using (MemoryStream excelStream = new MemoryStream())
+            {
+                excelStream.Write(excelTestFile, 0, excelTestFile.Length);
+
+                using (ExcelPackage exlPackage = new ExcelPackage(excelStream))
+                {
+
+                    var savePath = Path.Combine(TestContext.TestDeploymentDir, $"{TestContext.TestName}.xlsx");
+                    exlPackage.SaveAs(new FileInfo(savePath));
+                    var exApp = new Microsoft.Office.Interop.Excel.Application();
+
+                    try
+                    {
+                        var exWbk = exApp.Workbooks.Open(savePath);
+                    }
+                    catch (System.Runtime.InteropServices.COMException)
+                    {
+                        Assert.Fail("It is not possible to open the workbook after EPPlus saved it.");
+                    }
+                    finally
+                    {
+                        exApp.Workbooks.Close();
+                    }
+                }
+            }
+        }
+
 
 
 
